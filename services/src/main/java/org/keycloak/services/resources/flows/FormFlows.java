@@ -21,12 +21,22 @@
  */
 package org.keycloak.services.resources.flows;
 
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.imageio.spi.ServiceRegistry;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 
 import org.jboss.resteasy.spi.HttpRequest;
+import org.jboss.resteasy.spi.ResteasyUriInfo;
+import org.keycloak.services.FormService;
 import org.keycloak.services.models.RealmModel;
 import org.keycloak.services.models.UserModel;
+import org.keycloak.social.SocialProvider;
 import org.picketlink.idm.model.sample.Realm;
 
 /**
@@ -57,7 +67,35 @@ public class FormFlows {
     }
 
     public Response forwardToAccount() {
-        return forwardToForm(Pages.ACCOUNT);
+        return forwardToTemplate(Pages.ACCOUNT);
+    }
+
+    private Response forwardToTemplate(String template) {
+
+        FormService.FormServiceDataBean formDataBean = new FormService.FormServiceDataBean(realm, userModel, formData, error);
+
+        ResteasyUriInfo uriInfo = request.getUri();
+        MultivaluedMap<String, String> queryParameterMap = uriInfo.getQueryParameters();
+        String requestURI = uriInfo.getBaseUri().getPath();
+        UriBuilder uriBuilder = UriBuilder.fromUri(requestURI);
+
+        for(String k : queryParameterMap.keySet()){
+            uriBuilder.replaceQueryParam(k, queryParameterMap.get(k).toArray());
+        }
+
+        URI baseURI = uriBuilder.build();
+
+        formDataBean.setBaseURI(baseURI);
+
+        Iterator<FormService> itr = ServiceRegistry.lookupProviders(FormService.class);
+
+        while (itr.hasNext()) {
+            FormService provider = itr.next();
+            if (provider.getId().equals("FormServiceId"))
+                return Response.status(200).entity(provider.process(template, formDataBean)).build();
+        }
+
+        return Response.status(200).entity("form provider not found").build();
     }
 
     private Response forwardToForm(String form) {
@@ -80,7 +118,7 @@ public class FormFlows {
     }
 
     public Response forwardToLogin() {
-        return forwardToForm(Pages.LOGIN);
+        return forwardToTemplate(Pages.LOGIN);
     }
 
     public Response forwardToLoginTotp() {
@@ -92,7 +130,7 @@ public class FormFlows {
     }
 
     public Response forwardToRegistration() {
-        return forwardToForm(Pages.REGISTER);
+        return forwardToTemplate(Pages.REGISTER);
     }
 
     public Response forwardToSocial() {

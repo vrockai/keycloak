@@ -28,9 +28,9 @@ public class Pages {
 
     public final static String ACCESS = "/forms/access.xhtml";
 
-    public final static String ACCOUNT = "/forms/account.xhtml";
+    public final static String ACCOUNT = "/forms/account.ftl";
 
-    public final static String LOGIN = "/forms/login.xhtml";
+    public final static String LOGIN = "/forms/login.ftl";
 
     public final static String LOGIN_TOTP = "/forms/login-totp.xhtml";
 
@@ -38,7 +38,7 @@ public class Pages {
 
     public final static String PASSWORD = "/forms/password.xhtml";
 
-    public final static String REGISTER = "/forms/register.xhtml";
+    public final static String REGISTER = "/forms/register.ftl";
 
     public final static String SECURITY_FAILURE = "/saas/securityFailure.jsp";
 
