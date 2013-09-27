@@ -59,6 +59,9 @@ module.config([ '$routeProvider', function($routeProvider) {
                 user : function(UserLoader) {
                     return UserLoader();
                 },
+                applications : function(ApplicationListLoader) {
+                    return ApplicationListLoader();
+                },
                 roles : function(RoleListLoader) {
                     return RoleListLoader();
                 }
@@ -108,6 +111,51 @@ module.config([ '$routeProvider', function($routeProvider) {
             },
             controller : 'RoleListCtrl'
         })
+
+        .when('/create/role/:realm/applications/:application', {
+            templateUrl : 'partials/application-role-detail.html',
+            resolve : {
+                realm : function(RealmLoader) {
+                    return RealmLoader();
+                },
+                application : function(ApplicationLoader) {
+                    return ApplicationLoader();
+                },
+                role : function() {
+                    return {};
+                }
+            },
+            controller : 'ApplicationRoleDetailCtrl'
+        }).when('/realms/:realm/applications/:application/roles/:role', {
+            templateUrl : 'partials/application-role-detail.html',
+            resolve : {
+                realm : function(RealmLoader) {
+                    return RealmLoader();
+                },
+                application : function(ApplicationLoader) {
+                    return ApplicationLoader();
+                },
+                role : function(ApplicationRoleLoader) {
+                    return ApplicationRoleLoader();
+                }
+            },
+            controller : 'ApplicationRoleDetailCtrl'
+        }).when('/realms/:realm/applications/:application/roles', {
+            templateUrl : 'partials/application-role-list.html',
+            resolve : {
+                realm : function(RealmLoader) {
+                    return RealmLoader();
+                },
+                application : function(ApplicationLoader) {
+                    return ApplicationLoader();
+                },
+                roles : function(ApplicationRoleListLoader) {
+                    return ApplicationRoleListLoader();
+                }
+            },
+            controller : 'ApplicationRoleListCtrl'
+        })
+
 
 
         .when('/create/application/:realm', {

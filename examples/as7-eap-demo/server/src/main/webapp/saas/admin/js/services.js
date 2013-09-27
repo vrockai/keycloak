@@ -111,6 +111,16 @@ module.factory('RealmRoleMapping', function($resource) {
     });
 });
 
+module.factory('ApplicationRoleMapping', function($resource) {
+    return $resource('/auth-server/rest/saas/admin/realms/:realm/users/:userId/role-mappings/applications/:application', {
+        realm : '@realm',
+        userId : '@userId',
+        application : "@application"
+    });
+});
+
+
+
 module.factory('RealmRoles', function($resource) {
     return $resource('/auth-server/rest/saas/admin/realms/:realm/roles', {
         realm : '@realm'
@@ -129,6 +139,19 @@ module.factory('Role', function($resource) {
         }
     });
 });
+
+module.factory('ApplicationRole', function($resource) {
+    return $resource('/auth-server/rest/saas/admin/realms/:realm/applications/:application/roles/:roleId', {
+        realm : '@realm',
+        application : "@application",
+        roleId : '@roleId'
+    },  {
+        update : {
+            method : 'PUT'
+        }
+    });
+});
+
 
 module.factory('Application', function($resource) {
     return $resource('/auth-server/rest/saas/admin/realms/:realm/applications/:id', {
