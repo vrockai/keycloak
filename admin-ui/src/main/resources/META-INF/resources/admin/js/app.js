@@ -564,6 +564,28 @@ module.directive('onoffswitch', function() {
     }
 });
 
+module.directive('kcSwitch', function() {
+    return {
+        restrict: "E",
+        require: 'ngModel',
+        replace: true,
+        scope: {
+            ngModel: '=',
+            ngDisabled: '=',
+            kcName: '@',
+            kcId: '@',
+            kcOnText: '@',
+            kcOffText: '@'
+        },
+        compile: function(element, attrs) {
+            attrs.kcOnText = attrs.kcOnText || "ON";
+            attrs.kcOffText = attrs.kcOffText || "OFF";
+            attrs.ngDisabled = attrs.ngDisabled || false;
+        },
+        templateUrl: "partials/directives/kcSwitch.html"
+    }
+});
+
 module.directive('kcInput', function() {
     var d = {
         scope : true,

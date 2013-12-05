@@ -1,0 +1,10 @@
+<div class="onoffswitch" ng-class="{disabled: ngDisabled}">
+    <input type="checkbox" id="{{kcId}}" name="{{kcName}}" class="onoffswitch-checkbox" ng-model="ngModel" ng-disabled="ngDisabled">
+    <label class="onoffswitch-label" for="{{kcId}}">
+        <span class="onoffswitch-inner">
+            <span class="onoffswitch-active">{{kcOnText}}</span>
+            <span class="onoffswitch-inactive">{{kcOffText}}</span>
+        </span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
