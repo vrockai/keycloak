@@ -23,7 +23,7 @@ package org.keycloak.services.resources;
 
 import org.jboss.resteasy.logging.Logger;
 import org.jboss.resteasy.spi.HttpRequest;
-import org.keycloak.forms.Forms;
+import org.keycloak.login.Forms;
 import org.keycloak.jose.jws.JWSInput;
 import org.keycloak.jose.jws.crypto.RSAProvider;
 import org.keycloak.models.RealmModel;
@@ -97,7 +97,7 @@ public class RequiredActionsService {
 
         String error = Validation.validateUpdateProfileForm(formData);
         if (error != null) {
-            return Flows.forms(realm, request, uriInfo).setError(error).createResponse(RequiredAction.UPDATE_PROFILE);
+            return Flows.forms(realm, request, uriInfo).setUser(user).setError(error).createResponse(RequiredAction.UPDATE_PROFILE);
         }
 
         user.setFirstName(formData.getFirst("firstName"));

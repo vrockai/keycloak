@@ -1,4 +1,4 @@
-package org.keycloak.forms;
+package org.keycloak.login;
 
 import org.jboss.resteasy.spi.HttpRequest;
 import org.keycloak.models.RealmModel;

@@ -1,7 +1,7 @@
 <#import "template.ftl" as layout>
 <@layout.mainLayout active='password' bodyClass='password'; section>
 
-    <h2 class="pull-left"Change Password</h2>
+    <h2 class="pull-left">Change Password</h2>
 
     <p class="subtitle">All fields required</p>
 

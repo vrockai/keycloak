@@ -1,4 +1,4 @@
-package org.keycloak.forms;
+package org.keycloak.login;
 
 /**
  * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>

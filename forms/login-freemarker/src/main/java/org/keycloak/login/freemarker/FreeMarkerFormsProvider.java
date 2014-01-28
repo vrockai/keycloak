@@ -1,8 +1,8 @@
-package org.keycloak.forms.freemarker;
+package org.keycloak.login.freemarker;
 
 import org.jboss.resteasy.spi.HttpRequest;
-import org.keycloak.forms.Forms;
-import org.keycloak.forms.FormsProvider;
+import org.keycloak.login.Forms;
+import org.keycloak.login.FormsProvider;
 import org.keycloak.models.RealmModel;
 
 import javax.ws.rs.core.UriInfo;

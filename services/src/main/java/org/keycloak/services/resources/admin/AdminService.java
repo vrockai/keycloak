@@ -6,7 +6,6 @@ import org.jboss.resteasy.spi.HttpRequest;
 import org.jboss.resteasy.spi.HttpResponse;
 import org.jboss.resteasy.spi.NotImplementedYetException;
 import org.keycloak.AbstractOAuthClient;
-import org.keycloak.forms.FormsPages;
 import org.keycloak.jaxrs.JaxrsOAuthClient;
 import org.keycloak.jose.jws.JWSInput;
 import org.keycloak.jose.jws.crypto.RSAProvider;

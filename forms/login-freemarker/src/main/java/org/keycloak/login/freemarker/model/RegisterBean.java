@@ -19,32 +19,31 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.keycloak.forms.freemarker.model;
+package org.keycloak.login.freemarker.model;
 
 import javax.ws.rs.core.MultivaluedMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
  */
-public class LoginBean {
+public class RegisterBean {
 
-    private String username;
+    private Map<String, String> formData = new HashMap<String, String>();
 
-    private String password;
+    public RegisterBean(MultivaluedMap<String, String> formData) {
+        this.formData = new HashMap<String, String>();
 
-    public LoginBean(MultivaluedMap<String, String> formData){
         if (formData != null) {
-            username = formData.getFirst("username");
-            password = formData.getFirst("password");
+            for (String k : formData.keySet()) {
+                this.formData.put(k, formData.getFirst(k));
+            }
         }
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
+    public Map<String, String> getFormData() {
+        return formData;
     }
 
 }

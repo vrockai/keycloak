@@ -19,11 +19,9 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.keycloak.forms.freemarker.model;
+package org.keycloak.login.freemarker.model;
 
-import org.keycloak.forms.freemarker.FreeMarkerForms;
-
-import java.util.ResourceBundle;
+import org.keycloak.login.freemarker.FreeMarkerForms;
 
 /**
  * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>

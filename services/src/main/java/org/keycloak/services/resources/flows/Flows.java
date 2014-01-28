@@ -22,8 +22,8 @@
 package org.keycloak.services.resources.flows;
 
 import org.jboss.resteasy.spi.HttpRequest;
-import org.keycloak.forms.Forms;
-import org.keycloak.forms.FormsLoader;
+import org.keycloak.login.Forms;
+import org.keycloak.login.FormsLoader;
 import org.keycloak.models.RealmModel;
 import org.keycloak.services.managers.AuthenticationManager;
 import org.keycloak.services.managers.TokenManager;

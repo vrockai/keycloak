@@ -1,18 +1,19 @@
-package org.keycloak.forms.freemarker;
+package org.keycloak.login.freemarker;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.jboss.resteasy.spi.HttpRequest;
-import org.keycloak.forms.Forms;
-import org.keycloak.forms.FormsPages;
-import org.keycloak.forms.freemarker.model.RegisterBean;
-import org.keycloak.forms.freemarker.model.SocialBean;
-import org.keycloak.forms.freemarker.model.TotpBean;
-import org.keycloak.forms.freemarker.model.LoginBean;
-import org.keycloak.forms.freemarker.model.RealmBean;
-import org.keycloak.forms.freemarker.model.MessageBean;
-import org.keycloak.forms.freemarker.model.UrlBean;
+import org.keycloak.login.Forms;
+import org.keycloak.login.FormsPages;
+import org.keycloak.login.freemarker.model.ProfileBean;
+import org.keycloak.login.freemarker.model.RegisterBean;
+import org.keycloak.login.freemarker.model.SocialBean;
+import org.keycloak.login.freemarker.model.TotpBean;
+import org.keycloak.login.freemarker.model.LoginBean;
+import org.keycloak.login.freemarker.model.RealmBean;
+import org.keycloak.login.freemarker.model.MessageBean;
+import org.keycloak.login.freemarker.model.UrlBean;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.services.email.EmailException;
@@ -68,23 +69,41 @@ public class FreeMarkerForms implements Forms {
     }
 
     public Response createResponse(UserModel.RequiredAction action) {
+        String actionMessage;
+        FormsPages page;
+
         switch (action) {
             case CONFIGURE_TOTP:
-                return setWarning(Messages.ACTION_WARN_TOTP).createResponse(FormsPages.LOGIN_CONFIG_TOTP);
+                actionMessage = Messages.ACTION_WARN_TOTP;
+                page = FormsPages.LOGIN_CONFIG_TOTP;
+                break;
             case UPDATE_PROFILE:
-                return setWarning(Messages.ACTION_WARN_PROFILE).createResponse(FormsPages.LOGIN_UPDATE_PROFILE);
+                actionMessage = Messages.ACTION_WARN_PROFILE;
+                page = FormsPages.LOGIN_UPDATE_PROFILE;
+                break;
             case UPDATE_PASSWORD:
-                return setWarning(Messages.ACTION_WARN_PASSWD).createResponse(FormsPages.LOGIN_UPDATE_PASSWORD);
+                actionMessage = Messages.ACTION_WARN_PASSWD;
+                page = FormsPages.LOGIN_UPDATE_PASSWORD;
+                break;
             case VERIFY_EMAIL:
                 try {
                     new EmailSender(realm.getSmtpConfig()).sendEmailVerification(user, realm, accessCodeId, uriInfo);
                 } catch (EmailException e) {
                     return setError("emailSendError").createErrorPage();
                 }
-                return setWarning(Messages.ACTION_WARN_EMAIL).createResponse(FormsPages.LOGIN_VERIFY_EMAIL);
+
+                actionMessage = Messages.ACTION_WARN_EMAIL;
+                page = FormsPages.LOGIN_VERIFY_EMAIL;
+                break;
             default:
                 return Response.serverError().build();
         }
+
+        if (message == null) {
+            setWarning(actionMessage);
+        }
+
+        return createResponse(page);
     }
 
     private Response createResponse(FormsPages page) {
@@ -131,15 +150,15 @@ public class FreeMarkerForms implements Forms {
             case LOGIN_CONFIG_TOTP:
                 attributes.put("totp", new TotpBean(user, baseUri));
                 break;
+            case LOGIN_UPDATE_PROFILE:
+                attributes.put("user", new ProfileBean(user));
+                break;
             case REGISTER:
                 attributes.put("register", new RegisterBean(formData));
                 break;
             case OAUTH_GRANT:
                 break;
         }
-        // TODO Data for pages
-
-
 
         String result = processTemplate(attributes, page);
         return Response.status(status).type(MediaType.TEXT_HTML).entity(result).build();

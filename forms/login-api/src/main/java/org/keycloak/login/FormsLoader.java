@@ -1,4 +1,4 @@
-package org.keycloak.forms;
+package org.keycloak.login;
 
 import java.util.ServiceLoader;
 
