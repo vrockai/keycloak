@@ -6,6 +6,7 @@ import freemarker.template.TemplateException;
 import org.jboss.resteasy.spi.HttpRequest;
 import org.keycloak.login.Forms;
 import org.keycloak.login.FormsPages;
+import org.keycloak.login.freemarker.model.OAuthGrantBean;
 import org.keycloak.login.freemarker.model.ProfileBean;
 import org.keycloak.login.freemarker.model.RegisterBean;
 import org.keycloak.login.freemarker.model.SocialBean;
@@ -15,6 +16,7 @@ import org.keycloak.login.freemarker.model.RealmBean;
 import org.keycloak.login.freemarker.model.MessageBean;
 import org.keycloak.login.freemarker.model.UrlBean;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.RoleModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.services.email.EmailException;
 import org.keycloak.services.email.EmailSender;
@@ -30,6 +32,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -44,6 +47,8 @@ public class FreeMarkerForms implements Forms {
     private String accessCodeId;
     private String accessCode;
     private Response.Status status = Response.Status.OK;
+    private List<RoleModel> realmRolesRequested;
+    private MultivaluedMap<String, RoleModel> resourceRolesRequested;
 
     public static enum MessageType {SUCCESS, WARNING, ERROR}
 
@@ -157,6 +162,7 @@ public class FreeMarkerForms implements Forms {
                 attributes.put("register", new RegisterBean(formData));
                 break;
             case OAUTH_GRANT:
+                attributes.put("oauth", new OAuthGrantBean(accessCode, client, realmRolesRequested, resourceRolesRequested));
                 break;
         }
 
@@ -208,14 +214,6 @@ public class FreeMarkerForms implements Forms {
     }
 
     public Response createOAuthGrant() {
-        // TODO Pass missing oauth grant details
-//        FormServiceDataBean formDataBean = new FormServiceDataBean(realm, user, formData, null, message);
-//
-//        formDataBean.setOAuthRealmRolesRequested((List<RoleModel>) request.getAttribute("realmRolesRequested"));
-//        formDataBean.setOAuthResourceRolesRequested((MultivaluedMap<String, RoleModel>) request.getAttribute("resourceRolesRequested"));
-//        formDataBean.setOAuthCode(accessCode);
-//        formDataBean.setOAuthAction((String) request.getAttribute("action"));
-
         return createResponse(FormsPages.OAUTH_GRANT);
     }
 
@@ -256,6 +254,13 @@ public class FreeMarkerForms implements Forms {
     public Forms setAccessCode(String accessCodeId, String accessCode) {
         this.accessCodeId = accessCodeId;
         this.accessCode = accessCode;
+        return this;
+    }
+
+    @Override
+    public Forms setAccessRequest(List<RoleModel> realmRolesRequested, MultivaluedMap<String, RoleModel> resourceRolesRequested) {
+        this.realmRolesRequested = realmRolesRequested;
+        this.resourceRolesRequested = resourceRolesRequested;
         return this;
     }
 

@@ -29,6 +29,7 @@ import org.keycloak.services.resources.SocialResource;
 import org.keycloak.services.resources.TokenService;
 
 import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
 /**
@@ -126,6 +127,10 @@ public class Urls {
 
     public static URI realmRegisterPage(URI baseUri, String realmId) {
         return tokenBase(baseUri).path(TokenService.class, "registerPage").build(realmId);
+    }
+
+    public static URI realmOauthAction(URI baseUri, String realmId) {
+        return tokenBase(baseUri).path(TokenService.class, "processOAuth").build(realmId);
     }
 
     public static URI realmCode(URI baseUri, String realmId) {

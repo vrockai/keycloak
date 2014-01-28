@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.keycloak.forms;
+package org.keycloak.login.freemarker.model;
 
 import org.keycloak.models.RoleModel;
 import org.keycloak.models.UserModel;
@@ -33,55 +33,34 @@ import java.util.List;
  */
 public class OAuthGrantBean {
 
-    private MultivaluedMap<String, RoleModel> resourceRolesRequested;
     private List<RoleModel> realmRolesRequested;
+    private MultivaluedMap<String, RoleModel> resourceRolesRequested;
+    private String code;
     private UserModel client;
     private String oAuthCode;
     private String action;
 
-    public String getAction() {
-        return action;
+    public OAuthGrantBean(String code, UserModel client, List<RoleModel> realmRolesRequested, MultivaluedMap<String, RoleModel> resourceRolesRequested) {
+        this.code = code;
+        this.client = client;
+        this.realmRolesRequested = realmRolesRequested;
+        this.resourceRolesRequested = resourceRolesRequested;
     }
 
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public List<String> getResourceNames(){
-         return new ArrayList<String>(resourceRolesRequested.keySet());
+    public String getCode() {
+        return code;
     }
 
     public MultivaluedMap<String, RoleModel> getResourceRolesRequested() {
         return resourceRolesRequested;
     }
 
-    public void setResourceRolesRequested(MultivaluedMap<String, RoleModel> resourceRolesRequested) {
-        this.resourceRolesRequested = resourceRolesRequested;
-    }
-
     public List<RoleModel> getRealmRolesRequested() {
         return realmRolesRequested;
     }
 
-    public void setRealmRolesRequested(List<RoleModel> realmRolesRequested) {
-        this.realmRolesRequested = realmRolesRequested;
-    }
-
-    public UserModel getClient() {
-        return client;
-    }
-
-    public void setClient(UserModel client) {
-        this.client = client;
-    }
-
-    // lowercase "o" needed for FM template to access the property
-    public String getoAuthCode() {
-        return oAuthCode;
-    }
-
-    public void setoAuthCode(String oAuthCode) {
-        this.oAuthCode = oAuthCode;
+    public String getClient() {
+        return client.getLoginName();
     }
 
 }

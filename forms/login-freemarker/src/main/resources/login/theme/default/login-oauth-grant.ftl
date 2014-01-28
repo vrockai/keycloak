@@ -11,7 +11,7 @@
 
     <#elseif section = "form">
     <div class="content-area">
-        <p class="instruction"><strong>${oauth.client.loginName}</strong> requests access to:</p>
+        <p class="instruction"><strong>${oauth.client}</strong> requests access to:</p>
         <ul>
             <#list oauth.realmRolesRequested as role>
                 <li>
@@ -30,8 +30,8 @@
         </ul>
 
         <p class="terms">Keycloak Central Login and Google will use this information in accordance with their respective terms of service and privacy policies.</p>
-        <form class="form-actions" action="${oauth.action}" method="POST">
-            <input type="hidden" name="code" value="${oauth.oAuthCode}">
+        <form class="form-actions" action="${url.oauthAction}" method="POST">
+            <input type="hidden" name="code" value="${oauth.code}">
             <input type="submit" class="btn-primary primary" name="accept" value="Accept">
             <input type="submit" class="btn-secondary" name="cancel" value="Cancel">
         </form>

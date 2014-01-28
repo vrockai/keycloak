@@ -110,7 +110,9 @@ public class OAuthFlows {
         if (!isResource
                 && (accessCode.getRealmRolesRequested().size() > 0 || accessCode.getResourceRolesRequested().size() > 0)) {
             accessCode.setExpiration(System.currentTimeMillis() / 1000 + realm.getAccessCodeLifespanUserAction());
-            return oauthGrantPage(accessCode, client);
+            return Flows.forms(realm, request, uriInfo).setAccessCode(accessCode.getId(), accessCode.getCode()).
+                    setAccessRequest(accessCode.getRealmRolesRequested(), accessCode.getResourceRolesRequested()).
+                    setClient(client).createOAuthGrant();
         }
 
         if (redirect != null) {
@@ -118,14 +120,6 @@ public class OAuthFlows {
         } else {
             return null;
         }
-    }
-
-    public Response oauthGrantPage(AccessCodeEntry accessCode, UserModel client) {
-        request.setAttribute("realmRolesRequested", accessCode.getRealmRolesRequested());
-        request.setAttribute("resourceRolesRequested", accessCode.getResourceRolesRequested());
-        request.setAttribute("action", TokenService.processOAuthUrl(uriInfo).build(realm.getName()).toString());
-
-        return Flows.forms(realm, request, uriInfo).setAccessCode(accessCode.getId(), accessCode.getCode()).setClient(client).createOAuthGrant();
     }
 
     public Response forwardToSecurityFailure(String message) {

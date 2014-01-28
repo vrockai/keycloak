@@ -21,6 +21,7 @@
  */
 package org.keycloak.login.freemarker.model;
 
+import org.keycloak.services.resources.TokenService;
 import org.keycloak.services.resources.flows.Urls;
 
 import java.net.URI;
@@ -77,6 +78,10 @@ public class UrlBean {
 
     public String getLoginEmailVerificationUrl() {
         return Urls.loginActionEmailVerification(baseURI, realm).toString();
+    }
+
+    public String getOauthAction() {
+        return Urls.realmOauthAction(baseURI, realm).toString();
     }
 
 }
