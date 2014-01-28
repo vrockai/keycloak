@@ -4,10 +4,10 @@ import org.jboss.resteasy.annotations.cache.NoCache;
 import org.jboss.resteasy.logging.Logger;
 import org.jboss.resteasy.spi.HttpRequest;
 import org.jboss.resteasy.spi.HttpResponse;
+import org.keycloak.forms.FormsPages;
 import org.keycloak.jose.jws.JWSBuilder;
 import org.keycloak.jose.jws.JWSInput;
 import org.keycloak.jose.jws.crypto.RSAProvider;
-import org.keycloak.models.ApplicationModel;
 import org.keycloak.models.Constants;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakTransaction;
@@ -228,8 +228,7 @@ public class TokenService {
         UserModel user = realm.getUser(username);
 
         if (user == null){
-            return Flows.forms(realm, request, uriInfo).setError(Messages.INVALID_USER).setFormData(formData)
-                    .forwardToLogin();
+            return Flows.forms(realm, request, uriInfo).setError(Messages.INVALID_USER).setFormData(formData).createLogin();
         }
 
         isTotpConfigurationRequired(user);
@@ -242,13 +241,11 @@ public class TokenService {
             case ACTIONS_REQUIRED:
                 return oauth.processAccessCode(scopeParam, state, redirect, client, user);
             case ACCOUNT_DISABLED:
-                return Flows.forms(realm, request, uriInfo).setError(Messages.ACCOUNT_DISABLED).setFormData(formData)
-                        .forwardToLogin();
+                return Flows.forms(realm, request, uriInfo).setError(Messages.ACCOUNT_DISABLED).setFormData(formData).createLogin();
             case MISSING_TOTP:
-                return Flows.forms(realm, request, uriInfo).setFormData(formData).forwardToLoginTotp();
+                return Flows.forms(realm, request, uriInfo).setFormData(formData).createLoginTotp();
             default:
-                return Flows.forms(realm, request, uriInfo).setError(Messages.INVALID_USER).setFormData(formData)
-                        .forwardToLogin();
+                return Flows.forms(realm, request, uriInfo).setError(Messages.INVALID_USER).setFormData(formData).createLogin();
         }
     }
 
@@ -319,14 +316,14 @@ public class TokenService {
         }
 
         if (error != null) {
-            return Flows.forms(realm, request, uriInfo).setError(error).setFormData(formData).forwardToRegistration();
+            return Flows.forms(realm, request, uriInfo).setError(error).setFormData(formData).createRegistration();
         }
 
         String username = formData.getFirst("username");
 
         UserModel user = realm.getUser(username);
         if (user != null) {
-            return Flows.forms(realm, request, uriInfo).setError(Messages.USERNAME_EXISTS).setFormData(formData).forwardToRegistration();
+            return Flows.forms(realm, request, uriInfo).setError(Messages.USERNAME_EXISTS).setFormData(formData).createRegistration();
         }
 
         user = realm.addUser(username);
@@ -517,8 +514,8 @@ public class TokenService {
         if (prompt != null && prompt.equals("none")) {
             return oauth.redirectError(client, "access_denied", state, redirect);
         }
-        logger.info("forwardToLogin() now...");
-        return Flows.forms(realm, request, uriInfo).forwardToLogin();
+        logger.info("createLogin() now...");
+        return Flows.forms(realm, request, uriInfo).createLogin();
     }
 
     @Path("registrations")
@@ -560,7 +557,7 @@ public class TokenService {
 
         authManager.expireIdentityCookie(realm, uriInfo);
 
-        return Flows.forms(realm, request, uriInfo).forwardToRegistration();
+        return Flows.forms(realm, request, uriInfo).createRegistration();
     }
 
     @Path("logout")

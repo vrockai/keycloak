@@ -6,6 +6,7 @@ import org.jboss.resteasy.spi.HttpRequest;
 import org.jboss.resteasy.spi.HttpResponse;
 import org.jboss.resteasy.spi.NotImplementedYetException;
 import org.keycloak.AbstractOAuthClient;
+import org.keycloak.forms.FormsPages;
 import org.keycloak.jaxrs.JaxrsOAuthClient;
 import org.keycloak.jose.jws.JWSInput;
 import org.keycloak.jose.jws.crypto.RSAProvider;
@@ -24,11 +25,8 @@ import org.keycloak.services.messages.Messages;
 import org.keycloak.services.resources.TokenService;
 import org.keycloak.services.resources.flows.Flows;
 import org.keycloak.services.resources.flows.OAuthFlows;
-import org.keycloak.util.KeycloakUriBuilder;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.NotFoundException;
@@ -226,7 +224,7 @@ public class AdminService {
     public Response errorOnLoginRedirect(@QueryParam ("error") String message) {
         RealmManager realmManager = new RealmManager(session);
         RealmModel realm = getAdminstrationRealm(realmManager);
-        return Flows.forms(realm, request, uriInfo).setError(message).forwardToErrorPage();
+        return Flows.forms(realm, request, uriInfo).setError(message).createErrorPage();
     }
 
     protected Response redirectOnLoginError(String message) {
@@ -372,13 +370,11 @@ public class AdminService {
                 NewCookie cookie = authManager.createSaasIdentityCookie(realm, user, uriInfo);
                 return Response.status(302).cookie(cookie).location(contextRoot(uriInfo).path(adminPath).build()).build();
             case ACCOUNT_DISABLED:
-                return Flows.forms(realm, request, uriInfo).setError(Messages.ACCOUNT_DISABLED).setFormData(formData)
-                        .forwardToLogin();
+                return Flows.forms(realm, request, uriInfo).setError(Messages.ACCOUNT_DISABLED).setFormData(formData).createLogin();
             case ACTIONS_REQUIRED:
                 return oauth.processAccessCode(null, "n", contextRoot(uriInfo).path(adminPath).build().toString(), adminConsoleUser, user);
             default:
-                return Flows.forms(realm, request, uriInfo).setError(Messages.INVALID_USER).setFormData(formData)
-                        .forwardToLogin();
+                return Flows.forms(realm, request, uriInfo).setError(Messages.INVALID_USER).setFormData(formData).createLogin();
         }
     }
 

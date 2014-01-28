@@ -340,6 +340,13 @@
                 <version>${keycloak.apache.httpcomponents.version}</version>
             </dependency>
              -->
+
+            <dependency>
+                <groupId>org.easymock</groupId>
+                <artifactId>easymock</artifactId>
+                <version>3.2</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
