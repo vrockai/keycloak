@@ -19,28 +19,44 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.keycloak.service;
+package org.keycloak.forms.freemarker.model;
 
-import org.keycloak.forms.OAuthGrantBean;
+import org.keycloak.forms.freemarker.FreeMarkerForms;
 
-import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
- * @author <a href="mailto:vrockai@redhat.com">Viliam Rockai</a>
+ * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
  */
-public class FormServiceImpl {
+public class MessageBean {
 
-    private class CommandOAuthGrant {
-        public void exec(Map<String, Object> attributes, FormServiceDataBean dataBean) {
-            OAuthGrantBean oauth = new OAuthGrantBean();
-            oauth.setAction(dataBean.getOAuthAction());
-            oauth.setResourceRolesRequested(dataBean.getOAuthResourceRolesRequested());
-            oauth.setClient(dataBean.getOAuthClient());
-            oauth.setoAuthCode(dataBean.getOAuthCode());
-            oauth.setRealmRolesRequested(dataBean.getOAuthRealmRolesRequested());
+    private String summary;
 
-            attributes.put("oauth", oauth);
-        }
+    private FreeMarkerForms.MessageType type;
+
+    public MessageBean(String message, FreeMarkerForms.MessageType type) {
+        this.summary = message;
+        this.type = type;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public String getType() {
+        return this.type.toString().toLowerCase();
+    }
+
+    public boolean isSuccess() {
+        return FreeMarkerForms.MessageType.SUCCESS.equals(this.type);
+    }
+
+    public boolean isWarning() {
+        return FreeMarkerForms.MessageType.WARNING.equals(this.type);
+    }
+
+    public boolean isError() {
+        return FreeMarkerForms.MessageType.ERROR.equals(this.type);
     }
 
 }

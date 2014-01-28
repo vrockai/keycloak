@@ -5,9 +5,6 @@ package org.keycloak.service;
  */
 public class Pages {
 
-    public final static String ACCESS = "access.ftl";
-
-    public final static String ACCOUNT = "account.ftl";
 
     public final static String LOGIN = "login.ftl";
 
@@ -19,8 +16,6 @@ public class Pages {
 
     public final static String OAUTH_GRANT = "login-oauth-grant.ftl";
 
-    public final static String PASSWORD = "password.ftl";
-
     public final static String LOGIN_RESET_PASSWORD = "login-reset-password.ftl";
 
     public final static String LOGIN_UPDATE_PASSWORD = "login-update-password.ftl";
@@ -30,10 +25,6 @@ public class Pages {
     public final static String REGISTER = "register.ftl";
 
     public final static String ERROR = "error.ftl";
-
-    public final static String SOCIAL = "social.ftl";
-
-    public final static String TOTP = "totp.ftl";
 
     public final static String LOGIN_UPDATE_PROFILE = "login-update-profile.ftl";
 

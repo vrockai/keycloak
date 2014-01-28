@@ -19,28 +19,31 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.keycloak.service;
+package org.keycloak.forms.freemarker.model;
 
-import org.keycloak.forms.OAuthGrantBean;
-
+import javax.ws.rs.core.MultivaluedMap;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author <a href="mailto:vrockai@redhat.com">Viliam Rockai</a>
+ * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
  */
-public class FormServiceImpl {
+public class RegisterBean {
 
-    private class CommandOAuthGrant {
-        public void exec(Map<String, Object> attributes, FormServiceDataBean dataBean) {
-            OAuthGrantBean oauth = new OAuthGrantBean();
-            oauth.setAction(dataBean.getOAuthAction());
-            oauth.setResourceRolesRequested(dataBean.getOAuthResourceRolesRequested());
-            oauth.setClient(dataBean.getOAuthClient());
-            oauth.setoAuthCode(dataBean.getOAuthCode());
-            oauth.setRealmRolesRequested(dataBean.getOAuthRealmRolesRequested());
+    private Map<String, String> formData = new HashMap<String, String>();
 
-            attributes.put("oauth", oauth);
+    public RegisterBean(MultivaluedMap<String, String> formData) {
+        this.formData = new HashMap<String, String>();
+
+        if (formData != null) {
+            for (String k : formData.keySet()) {
+                this.formData.put(k, formData.getFirst(k));
+            }
         }
+    }
+
+    public Map<String, String> getFormData() {
+        return formData;
     }
 
 }

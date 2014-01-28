@@ -1,14 +1,20 @@
 package org.keycloak.forms.freemarker;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import org.jboss.resteasy.spi.HttpRequest;
-import org.jboss.resteasy.spi.ResteasyUriInfo;
 import org.keycloak.forms.Forms;
 import org.keycloak.forms.FormsPages;
+import org.keycloak.forms.freemarker.model.RegisterBean;
+import org.keycloak.forms.freemarker.model.SocialBean;
+import org.keycloak.forms.freemarker.model.TotpBean;
+import org.keycloak.forms.freemarker.model.LoginBean;
+import org.keycloak.forms.freemarker.model.RealmBean;
+import org.keycloak.forms.freemarker.model.MessageBean;
+import org.keycloak.forms.freemarker.model.UrlBean;
 import org.keycloak.models.RealmModel;
-import org.keycloak.models.RoleModel;
 import org.keycloak.models.UserModel;
-import org.keycloak.service.FormServiceDataBean;
-import org.keycloak.service.FormServiceImpl;
 import org.keycloak.services.email.EmailException;
 import org.keycloak.services.email.EmailSender;
 import org.keycloak.services.messages.Messages;
@@ -18,19 +24,25 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URI;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
  */
 public class FreeMarkerForms implements Forms {
 
+    private static final String BUNDLE = "login.theme.default.messages.messages";
+
     private String message;
     private String accessCodeId;
     private String accessCode;
-    private Response.Status status;
+    private Response.Status status = Response.Status.OK;
 
     public static enum MessageType {SUCCESS, WARNING, ERROR}
 
@@ -75,14 +87,7 @@ public class FreeMarkerForms implements Forms {
         }
     }
 
-    private Response createResponse(FormsPages page, FormServiceDataBean formDataBean) {
-        return createResponse(Templates.getTemplate(page), formDataBean);
-    }
-
-    private Response createResponse(String template, FormServiceDataBean formDataBean) {
-
-        // Getting URI needed by form processing service
-        ResteasyUriInfo uriInfo = request.getUri();
+    private Response createResponse(FormsPages page) {
         MultivaluedMap<String, String> queryParameterMap = uriInfo.getQueryParameters();
 
         String requestURI = uriInfo.getBaseUri().getPath();
@@ -96,22 +101,66 @@ public class FreeMarkerForms implements Forms {
             uriBuilder.replaceQueryParam("code", accessCode);
         }
 
-        URI baseURI = uriBuilder.build();
-        formDataBean.setBaseURI(baseURI);
+        Map<String, Object> attributes = new HashMap<String, Object>();
 
-        // TODO find a better way to obtain contextPath
-        // Getting context path by removing "rest/" substring from the BaseUri path
-        formDataBean.setContextPath(requestURI.substring(0, requestURI.length() - 6));
+        ResourceBundle rb = ResourceBundle.getBundle(BUNDLE);
 
-        String result = new FormServiceImpl().process(template, formDataBean);
+        String resourcePath = uriInfo.getBaseUri().getPath();
+        resourcePath = resourcePath.substring(0, resourcePath.length() - 6);
+        resourcePath += "/login/theme/default";
+
+        attributes.put("rb", rb);
+
+        if (message != null) {
+            attributes.put("message", new MessageBean(rb.containsKey(message) ? rb.getString(message) : message, messageType));
+        }
+
+        attributes.put("resourcePath", resourcePath);
+
+        URI baseUri = uriBuilder.build();
+
+        if (realm != null) {
+            attributes.put("realm", new RealmBean(realm));
+            attributes.put("social", new SocialBean(realm, baseUri));
+            attributes.put("url", new UrlBean(realm.getName(), baseUri));
+        }
+
+        attributes.put("login", new LoginBean(formData));
+
+        switch (page) {
+            case LOGIN_CONFIG_TOTP:
+                attributes.put("totp", new TotpBean(user, baseUri));
+                break;
+            case REGISTER:
+                attributes.put("register", new RegisterBean(formData));
+                break;
+            case OAUTH_GRANT:
+                break;
+        }
+        // TODO Data for pages
+
+
+
+        String result = processTemplate(attributes, page);
         return Response.status(status).type(MediaType.TEXT_HTML).entity(result).build();
     }
 
-    private Response createResponse(FormsPages page) {
-        FormServiceDataBean formDataBean = new FormServiceDataBean(realm, user, formData, null, message);
-        formDataBean.setMessageType(messageType);
+    private String processTemplate(Object data, FormsPages page) {
+        Writer out = new StringWriter();
+        Configuration cfg = new Configuration();
 
-        return createResponse(page, formDataBean);
+        try {
+            cfg.setClassForTemplateLoading(FreeMarkerForms.class, "/login/theme/default");
+            Template template = cfg.getTemplate(Templates.getTemplate(page));
+
+            template.process(data, out);
+        } catch (IOException e) {
+            throw new RuntimeException(e); // TODO Error handling
+        } catch (TemplateException e) {
+            throw new RuntimeException(e); // TODO Error handling
+        }
+
+        return out.toString();
     }
 
     public Response createLogin() {
@@ -140,14 +189,15 @@ public class FreeMarkerForms implements Forms {
     }
 
     public Response createOAuthGrant() {
-        FormServiceDataBean formDataBean = new FormServiceDataBean(realm, user, formData, null, message);
+        // TODO Pass missing oauth grant details
+//        FormServiceDataBean formDataBean = new FormServiceDataBean(realm, user, formData, null, message);
+//
+//        formDataBean.setOAuthRealmRolesRequested((List<RoleModel>) request.getAttribute("realmRolesRequested"));
+//        formDataBean.setOAuthResourceRolesRequested((MultivaluedMap<String, RoleModel>) request.getAttribute("resourceRolesRequested"));
+//        formDataBean.setOAuthCode(accessCode);
+//        formDataBean.setOAuthAction((String) request.getAttribute("action"));
 
-        formDataBean.setOAuthRealmRolesRequested((List<RoleModel>) request.getAttribute("realmRolesRequested"));
-        formDataBean.setOAuthResourceRolesRequested((MultivaluedMap<String, RoleModel>) request.getAttribute("resourceRolesRequested"));
-        formDataBean.setOAuthCode(accessCode);
-        formDataBean.setOAuthAction((String) request.getAttribute("action"));
-
-        return createResponse(FormsPages.OAUTH_GRANT, formDataBean);
+        return createResponse(FormsPages.OAUTH_GRANT);
     }
 
     public FreeMarkerForms setError(String message) {

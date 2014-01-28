@@ -13,6 +13,7 @@ import org.keycloak.models.ApplicationModel;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -79,7 +80,7 @@ public class FreeMarkerAccount implements Account {
         }
 
         String result = processTemplate(attributes, page);
-        return Response.status(status).entity(result).build();
+        return Response.status(status).type(MediaType.TEXT_HTML).entity(result).build();
     }
 
     private String getReferrerUri() {

@@ -19,28 +19,35 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.keycloak.service;
+package org.keycloak.forms.freemarker.model;
 
-import org.keycloak.forms.OAuthGrantBean;
-
-import java.util.Map;
+import org.keycloak.models.RealmModel;
 
 /**
- * @author <a href="mailto:vrockai@redhat.com">Viliam Rockai</a>
+ * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
  */
-public class FormServiceImpl {
+public class RealmBean {
 
-    private class CommandOAuthGrant {
-        public void exec(Map<String, Object> attributes, FormServiceDataBean dataBean) {
-            OAuthGrantBean oauth = new OAuthGrantBean();
-            oauth.setAction(dataBean.getOAuthAction());
-            oauth.setResourceRolesRequested(dataBean.getOAuthResourceRolesRequested());
-            oauth.setClient(dataBean.getOAuthClient());
-            oauth.setoAuthCode(dataBean.getOAuthCode());
-            oauth.setRealmRolesRequested(dataBean.getOAuthRealmRolesRequested());
+    private RealmModel realm;
 
-            attributes.put("oauth", oauth);
-        }
+    public RealmBean(RealmModel realmModel) {
+        realm = realmModel;
     }
 
+    public String getName() {
+        return realm.getName();
+    }
+
+    public boolean isSocial() {
+        return realm.isSocial();
+    }
+
+    public boolean isRegistrationAllowed() {
+        return realm.isRegistrationAllowed();
+    }
+
+    public boolean isResetPasswordAllowed() {
+        return realm.isResetPasswordAllowed();
+    }
+    
 }

@@ -19,28 +19,32 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.keycloak.service;
+package org.keycloak.forms.freemarker.model;
 
-import org.keycloak.forms.OAuthGrantBean;
-
-import java.util.Map;
+import javax.ws.rs.core.MultivaluedMap;
 
 /**
- * @author <a href="mailto:vrockai@redhat.com">Viliam Rockai</a>
+ * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
  */
-public class FormServiceImpl {
+public class LoginBean {
 
-    private class CommandOAuthGrant {
-        public void exec(Map<String, Object> attributes, FormServiceDataBean dataBean) {
-            OAuthGrantBean oauth = new OAuthGrantBean();
-            oauth.setAction(dataBean.getOAuthAction());
-            oauth.setResourceRolesRequested(dataBean.getOAuthResourceRolesRequested());
-            oauth.setClient(dataBean.getOAuthClient());
-            oauth.setoAuthCode(dataBean.getOAuthCode());
-            oauth.setRealmRolesRequested(dataBean.getOAuthRealmRolesRequested());
+    private String username;
 
-            attributes.put("oauth", oauth);
+    private String password;
+
+    public LoginBean(MultivaluedMap<String, String> formData){
+        if (formData != null) {
+            username = formData.getFirst("username");
+            password = formData.getFirst("password");
         }
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
 }
