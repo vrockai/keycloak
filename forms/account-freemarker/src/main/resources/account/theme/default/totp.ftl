@@ -35,7 +35,7 @@
         </form>
     <#else>
         <ol>
-            <li>
+            <li class="clearfix">
                 <p><strong>1</strong>Download the <a href="http://code.google.com/p/google-authenticator/" target="_blank">Google Authenticator app</a> in your device.</p>
             </li>
             <li class="clearfix">
