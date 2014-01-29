@@ -1,4 +1,4 @@
-<#import "template-login-action.ftl" as layout>
+<#import "template.ftl" as layout>
 <@layout.registrationLayout bodyClass=""; section>
 
     <#if section = "title">
