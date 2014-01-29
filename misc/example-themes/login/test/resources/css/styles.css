@@ -1,0 +1,97 @@
+body {
+    background-color: #040507;
+    background-image: url('../img/bkgrnd.png');
+    background-size: cover;
+
+    color: rgba(255,255,255,0.75);
+    font-family: sans-serif;
+    text-shadow: 0px 0px 6px #000;
+
+}
+
+.content {
+    margin: 10% auto 0 auto;
+    padding: 1em 1em 1em 2em;
+    overflow: auto;
+    min-width: 400px;
+    width: 40%;
+}
+
+label {
+    display: block;
+}
+
+h2 {
+    font-size: 2.2em;
+}
+
+input[type=text], input[type=password] {
+    color: #ddd;
+    font-size: 1em;
+    margin-bottom: 2em;
+    background-color: rgba(0,0,0,0.25);
+    border: 2px solid rgba(0,0,0,0.2);
+    padding: 0.5em;
+    width: 90%;
+}
+
+input[type=submit] {
+    border: none;
+
+    background: -webkit-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
+    background: -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
+    background: -ms-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
+    background: -o-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
+
+    box-shadow: 0px 0px 6px rgba(0,0,0,0.5);
+
+    color: rgba(0,0,0,0.75);
+
+    font-size: 1em;
+    font-weight: bold;
+
+    padding: 0.5em 2em;
+    margin-top: 0.5em;
+    margin-right: 2em;
+}
+
+p.powered {
+    font-size: 0.8em;
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+p.powered a {
+    color: #ddd;
+    text-decoration: none;
+}
+
+div.feedback {
+    background-color: rgba(255,255,255,0.2);
+    box-shadow: 0px 0px 6px rgba(0,0,0,0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+
+div.success {
+    background-color: rgba(155,155,255,0.2);
+}
+
+div.warning {
+    background-color: rgba(255,175,0,0.2);
+}
+
+div.error {
+    background-color: rgba(255,0,0,0.2);
+}
+
+div.feedback p {
+    margin: 0;
+    padding: 1.5em;
+}
