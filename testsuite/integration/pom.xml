@@ -88,6 +88,11 @@
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-forms-common-freemarker</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
             <artifactId>keycloak-account-api</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -104,6 +109,11 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-login-freemarker</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-login-theme</artifactId>
             <version>${project.version}</version>
         </dependency>
 

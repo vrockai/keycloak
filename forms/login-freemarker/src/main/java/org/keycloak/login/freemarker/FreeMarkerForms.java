@@ -129,17 +129,11 @@ public class FreeMarkerForms implements Forms {
 
         ResourceBundle rb = ResourceBundle.getBundle(BUNDLE);
 
-        String resourcePath = uriInfo.getBaseUri().getPath();
-        resourcePath = resourcePath.substring(0, resourcePath.length() - 6);
-        resourcePath += "/login/theme/default";
-
         attributes.put("rb", rb);
 
         if (message != null) {
             attributes.put("message", new MessageBean(rb.containsKey(message) ? rb.getString(message) : message, messageType));
         }
-
-        attributes.put("resourcePath", resourcePath);
 
         URI baseUri = uriBuilder.build();
 

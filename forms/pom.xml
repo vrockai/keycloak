@@ -17,8 +17,10 @@
         <module>common-freemarker</module>
         <module>account-api</module>
         <module>account-freemarker</module>
+        <module>account-theme</module>
         <module>login-api</module>
         <module>login-freemarker</module>
+        <module>login-theme</module>
     </modules>
 
 </project>

@@ -230,7 +230,7 @@ public class KeycloakServer {
             new ApplianceBootstrap().bootstrap(session);
 
             // No need to require admin to change password as this server is for dev/test
-            manager.getRealm(Constants.ADMIN_REALM).getUser("admin").removeRequiredAction(UserModel.RequiredAction.UPDATE_PASSWORD);
+            //manager.getRealm(Constants.ADMIN_REALM).getUser("admin").removeRequiredAction(UserModel.RequiredAction.UPDATE_PASSWORD);
 
             session.getTransaction().commit();
         } finally {

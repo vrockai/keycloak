@@ -84,4 +84,9 @@ public class UrlBean {
         return Urls.realmOauthAction(baseURI, realm).toString();
     }
 
+    public String getResourcesPath() {
+        URI uri = Urls.themeRoot(baseURI);
+        return uri.getPath() + "/login/default";
+    }
+
 }

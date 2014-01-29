@@ -8,24 +8,28 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>keycloak-forms-common-freemarker</artifactId>
-	<name>Keycloak Forms Common FreeMarker</name>
+	<artifactId>keycloak-account-theme</artifactId>
+	<name>Keycloak Account Management Default Theme</name>
 	<description />
 
 	<dependencies>
-        <dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-core</artifactId>
+			<version>${project.version}</version>
 		</dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-model-api</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <scope>test</scope>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>jaxrs-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
         </dependency>
 	</dependencies>
 

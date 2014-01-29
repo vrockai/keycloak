@@ -22,6 +22,7 @@
 package org.keycloak.services.resources.flows;
 
 import org.keycloak.services.resources.AccountService;
+import org.keycloak.services.resources.ThemeResource;
 import org.keycloak.services.resources.admin.AdminService;
 import org.keycloak.services.resources.RealmsResource;
 import org.keycloak.services.resources.RequiredActionsService;
@@ -170,11 +171,19 @@ public class Urls {
                 .build(realmId);
     }
 
+    public static URI themeRoot(URI baseUri) {
+        return themeBase(baseUri).build();
+    }
+
     private static UriBuilder requiredActionsBase(URI baseUri) {
         return tokenBase(baseUri).path(TokenService.class, "getRequiredActionsService");
     }
 
     private static UriBuilder tokenBase(URI baseUri) {
         return realmBase(baseUri).path(RealmsResource.class, "getTokenService");
+    }
+
+    private static UriBuilder themeBase(URI baseUri) {
+        return UriBuilder.fromUri(baseUri).path(ThemeResource.class);
     }
 }
