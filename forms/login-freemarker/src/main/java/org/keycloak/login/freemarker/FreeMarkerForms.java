@@ -1,6 +1,5 @@
 package org.keycloak.login.freemarker;
 
-import freemarker.cache.TemplateLoader;
 import freemarker.cache.URLTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -10,14 +9,14 @@ import org.keycloak.freemarker.Theme;
 import org.keycloak.freemarker.ThemeLoader;
 import org.keycloak.login.Forms;
 import org.keycloak.login.FormsPages;
+import org.keycloak.login.freemarker.model.LoginBean;
+import org.keycloak.login.freemarker.model.MessageBean;
 import org.keycloak.login.freemarker.model.OAuthGrantBean;
 import org.keycloak.login.freemarker.model.ProfileBean;
+import org.keycloak.login.freemarker.model.RealmBean;
 import org.keycloak.login.freemarker.model.RegisterBean;
 import org.keycloak.login.freemarker.model.SocialBean;
 import org.keycloak.login.freemarker.model.TotpBean;
-import org.keycloak.login.freemarker.model.LoginBean;
-import org.keycloak.login.freemarker.model.RealmBean;
-import org.keycloak.login.freemarker.model.MessageBean;
 import org.keycloak.login.freemarker.model.UrlBean;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.RoleModel;
@@ -32,7 +31,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URI;
@@ -47,7 +45,7 @@ import java.util.ResourceBundle;
  */
 public class FreeMarkerForms implements Forms {
 
-    private static final String BUNDLE = "login.theme.default.messages.messages";
+    private static final String BUNDLE = "theme.login.default.messages.messages";
 
     private String message;
     private String accessCodeId;
