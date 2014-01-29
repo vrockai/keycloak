@@ -9,17 +9,10 @@
     </title>
     <link rel="icon" href="${url.resourcesPath}/img/favicon.ico">
     <link href="${url.resourcesPath}/css/styles.css" rel="stylesheet" />
-    <style type="text/css">
-        body.rcue-login-register {
-            background-image: url("${url.resourcesPath}/img/login-screen-background.jpg");
-        }
-    </style>
 </head>
 
 <body class="rcue-login-register ${bodyClass}">
-    <h1>
-        <a href="${url.loginUrl}" title="Go to the login page"><img src="${url.resourcesPath}/img/keycloak-logo.png" alt="Keycloak" /></a>
-    </h1>
+    <div class="rcue-logo"></div>
 
     <div class="content">
         <h2>
@@ -34,7 +27,6 @@
             </#if>
             <div class="form-area ${(realm.social && bodyClass != "register")?string('social','')} ${(drawSeparator)?string('separator','')} clearfix">
                 <div class="section app-form">
-                    <h3>Application login area</h3>
                     <#if message?has_content>
                         <div class="feedback ${message.type} bottom-left show">
                             <p><strong>${message.summary}</strong></p>
@@ -45,7 +37,6 @@
 
                 <#if social.displaySocialProviders>
                     <div class="section social-login"> <span>or</span>
-                        <h3>Social login area</h3>
                         <p>${rb.getString('logInWith')}</p>
                         <ul>
                             <#list social.providers as p>
@@ -56,7 +47,6 @@
                 </#if>
 
                 <div class="section info-area">
-                    <h3>Info area</h3>
                     <#nested "info">
                 </div>
             </div>

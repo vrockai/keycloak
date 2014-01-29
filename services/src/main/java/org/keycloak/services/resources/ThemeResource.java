@@ -9,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -21,9 +22,9 @@ public class ThemeResource {
 
     @GET
     @Path("/{themType}/{themeName}/{path:.*}")
-    public Response createQrCode(@PathParam("themType") String themType, @PathParam("themeName") String themeName, @PathParam("path") String path) {
+    public Response createQrCode(@PathParam("themType") String themType, @PathParam("themeName") String themeName, @PathParam("path") String path) throws IOException {
         Theme theme = ThemeLoader.createTheme(themeName, Theme.Type.valueOf(themType.toUpperCase()));
-        InputStream resource = theme.getResource(path);
+        InputStream resource = theme.getResourceAsStream(path);
         if (resource != null) {
             return Response.ok(resource).type(mimeTypes.getContentType(path)).build();
         } else {

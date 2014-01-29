@@ -41,6 +41,7 @@ public class RealmRepresentation {
     protected List<OAuthClientRepresentation> oauthClients;
     protected Map<String, String> socialProviders;
     protected Map<String, String> smtpServer;
+    protected String theme;
 
     public String getSelf() {
         return self;
@@ -316,5 +317,13 @@ public class RealmRepresentation {
 
     public void setApplicationScopeMappings(Map<String, List<ScopeMappingRepresentation>> applicationScopeMappings) {
         this.applicationScopeMappings = applicationScopeMappings;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
     }
 }

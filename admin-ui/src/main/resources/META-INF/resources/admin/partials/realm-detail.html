@@ -66,6 +66,17 @@
                             <input ng-model="realm.requireSsl" name="requireSsl" id="requireSsl" onoffswitch />
                         </div>
                     </fieldset>
+                    <fieldset>
+                        <legend uncollapsed><span class="text">Optional Settings</span></legend>
+                        <div class="form-group">
+                            <label for="theme">Theme</label>
+
+                            <div class="controls">
+                                <input type="text" id="theme" name="theme" data-ng-model="realm.theme">
+                            </div>
+                        </div>
+                    </fieldset>
+
 
                     <div class="form-actions" data-ng-show="createRealm">
                         <button type="submit" kc-save class="primary" data-ng-show="changed">Save

@@ -1,6 +1,9 @@
 package org.keycloak.freemarker;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -63,9 +66,9 @@ public class ThemeLoader {
         }
 
         @Override
-        public InputStream getTemplate(String name) {
+        public URL getTemplate(String name) throws IOException {
             for (Theme t : themes) {
-                InputStream template = t.getTemplate(name);
+                URL template = t.getTemplate(name);
                 if (template != null) {
                     return template;
                 }
@@ -74,9 +77,32 @@ public class ThemeLoader {
         }
 
         @Override
-        public InputStream getResource(String path) {
+        public InputStream getTemplateAsStream(String name) throws IOException {
             for (Theme t : themes) {
-                InputStream resource = t.getResource(path);
+                InputStream template = t.getTemplateAsStream(name);
+                if (template != null) {
+                    return template;
+                }
+            }
+            return null;
+        }
+
+
+        @Override
+        public URL getResource(String path) throws IOException {
+            for (Theme t : themes) {
+                URL resource = t.getResource(path);
+                if (resource != null) {
+                    return resource;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public InputStream getResourceAsStream(String path) throws IOException {
+            for (Theme t : themes) {
+                InputStream resource = t.getResourceAsStream(path);
                 if (resource != null) {
                     return resource;
                 }

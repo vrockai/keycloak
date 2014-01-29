@@ -1,9 +1,13 @@
 package org.keycloak.login.freemarker;
 
+import freemarker.cache.TemplateLoader;
+import freemarker.cache.URLTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.jboss.resteasy.spi.HttpRequest;
+import org.keycloak.freemarker.Theme;
+import org.keycloak.freemarker.ThemeLoader;
 import org.keycloak.login.Forms;
 import org.keycloak.login.FormsPages;
 import org.keycloak.login.freemarker.model.OAuthGrantBean;
@@ -28,9 +32,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,12 +141,14 @@ public class FreeMarkerForms implements Forms {
             attributes.put("message", new MessageBean(rb.containsKey(message) ? rb.getString(message) : message, messageType));
         }
 
+        String themeName = realm.getTheme() != null ? realm.getTheme() : "default";
+
         URI baseUri = uriBuilder.build();
 
         if (realm != null) {
             attributes.put("realm", new RealmBean(realm));
             attributes.put("social", new SocialBean(realm, baseUri));
-            attributes.put("url", new UrlBean(realm.getName(), baseUri));
+            attributes.put("url", new UrlBean(realm.getName(), themeName, baseUri));
         }
 
         attributes.put("login", new LoginBean(formData));
@@ -160,16 +168,19 @@ public class FreeMarkerForms implements Forms {
                 break;
         }
 
-        String result = processTemplate(attributes, page);
+        Theme theme = ThemeLoader.createTheme(themeName, Theme.Type.LOGIN);
+
+        String result = processTemplate(attributes, page, theme);
         return Response.status(status).type(MediaType.TEXT_HTML).entity(result).build();
     }
 
-    private String processTemplate(Object data, FormsPages page) {
+    private String processTemplate(Object data, FormsPages page, Theme theme) {
         Writer out = new StringWriter();
         Configuration cfg = new Configuration();
 
         try {
-            cfg.setClassForTemplateLoading(FreeMarkerForms.class, "/login/theme/default");
+
+            cfg.setTemplateLoader(new ThemeTemplateLoader(theme));
             Template template = cfg.getTemplate(Templates.getTemplate(page));
 
             template.process(data, out);
@@ -262,6 +273,25 @@ public class FreeMarkerForms implements Forms {
     public Forms setStatus(Response.Status status) {
         this.status = status;
         return this;
+    }
+
+    public static class ThemeTemplateLoader extends URLTemplateLoader {
+
+        private Theme theme;
+
+        public ThemeTemplateLoader(Theme theme) {
+            this.theme = theme;
+        }
+
+        @Override
+        protected URL getURL(String name) {
+            try {
+                return theme.getTemplate(name);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 
 }

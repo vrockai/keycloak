@@ -4,6 +4,20 @@ body {
   min-width: 120em;
 }
 
+body.rcue-login-register {
+    background-image: url("../img/login-screen-background.jpg");
+}
+
+div.rcue-logo {
+    background-image: url("../img/keycloak-logo.png");
+    background-repeat: no-repeat;
+    height: 37px;
+    width: 150px;
+    position: absolute;
+    top: 5em;
+    right: 6.4em;
+}
+
 .rcue-login-register {
   background-color: #1D2226;
   background-position: top left;
