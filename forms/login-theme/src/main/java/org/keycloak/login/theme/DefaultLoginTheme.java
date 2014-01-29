@@ -12,7 +12,7 @@ public class DefaultLoginTheme implements Theme {
 
     public static final String NAME = "default";
 
-    private static final String ROOT = "login/theme/default/";
+    private static final String ROOT = "theme/login/default/";
 
     private static final String RESOURCE_ROOT = ROOT + "resources/";
     @Override
