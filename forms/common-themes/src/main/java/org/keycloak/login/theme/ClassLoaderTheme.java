@@ -25,7 +25,7 @@ public class ClassLoaderTheme implements Theme {
         this.parentName = parentName;
         this.type = type;
         this.templateRoot = "theme/" + type.toString().toLowerCase() + "/" + name + "/";
-        this.resourceRoot = "theme/" + type.toString().toLowerCase() + "/" + name + "resources/";
+        this.resourceRoot = "theme/" + type.toString().toLowerCase() + "/" + name + "/resources/";
     }
 
     @Override
