@@ -1,5 +1,7 @@
 package org.keycloak.freemarker;
 
+import org.keycloak.util.ProviderLoader;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -14,7 +16,7 @@ import java.util.ServiceLoader;
 public class ThemeLoader {
 
     public static Theme createTheme(String name, Theme.Type type) {
-        ServiceLoader<ThemeProvider> providers = ServiceLoader.load(ThemeProvider.class);
+        Iterable<ThemeProvider> providers = ProviderLoader.load(ThemeProvider.class);
 
         Theme theme = findTheme(providers, name, type);
         if (theme.getParentName() != null) {
@@ -32,14 +34,14 @@ public class ThemeLoader {
         }
     }
 
-    private static Theme findTheme(ServiceLoader<ThemeProvider> providers, String name, Theme.Type type) {
+    private static Theme findTheme(Iterable<ThemeProvider> providers, String name, Theme.Type type) {
         for (ThemeProvider p : providers) {
             if (p.hasTheme(name, type)) {
                 return p.createTheme(name, type);
             }
         }
 
-        throw new RuntimeException("Theme " + name + " (type: " + type + ") not found");
+        throw new RuntimeException(type.toString().toLowerCase() + " theme '" + name + "' not found");
     }
 
     public static class ExtendingTheme implements Theme {

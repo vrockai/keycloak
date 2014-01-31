@@ -28,7 +28,7 @@ public class FolderTheme implements Theme {
 
     @Override
     public String getParentName() {
-        return "default";
+        return "keycloak";
     }
 
     @Override

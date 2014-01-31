@@ -4,6 +4,7 @@ import org.keycloak.freemarker.Theme;
 import org.keycloak.freemarker.ThemeProvider;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -11,25 +12,35 @@ import java.util.Set;
  */
 public class DefaultLoginThemeProvider implements ThemeProvider {
 
+    private static Set<String> defaultThemes = new HashSet<String>();
+
+    static {
+        defaultThemes.add("rcue");
+        defaultThemes.add("keycloak");
+    }
+
     @Override
     public Theme createTheme(String name, Theme.Type type) {
-        if (type == Theme.Type.LOGIN && "default".equals(name)) {
-              return new DefaultLoginTheme();
+        if (hasTheme(name, type)) {
+            String parentName = "keycloak".equals(name) ? "rcue" : null;
+            return new ClassLoaderTheme(name, parentName, type);
+        } else {
+            return null;
         }
-        return null;
     }
 
     @Override
     public Set<String> nameSet(Theme.Type type) {
         if (type == Theme.Type.LOGIN) {
-            return Collections.singleton("default");
+            return defaultThemes;
+        } else {
+            return Collections.emptySet();
         }
-        return Collections.emptySet();
     }
 
     @Override
     public boolean hasTheme(String name, Theme.Type type) {
-        return type == Theme.Type.LOGIN && "default".equals(name);
+        return nameSet(type).contains(name);
     }
 
 }

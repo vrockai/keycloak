@@ -139,7 +139,7 @@ public class FreeMarkerForms implements Forms {
             attributes.put("message", new MessageBean(rb.containsKey(message) ? rb.getString(message) : message, messageType));
         }
 
-        String themeName = realm.getTheme() != null ? realm.getTheme() : "default";
+        String themeName = realm.getTheme() != null ? realm.getTheme() : "keycloak";
 
         URI baseUri = uriBuilder.build();
 

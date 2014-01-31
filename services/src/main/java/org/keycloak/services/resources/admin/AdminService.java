@@ -197,6 +197,30 @@ public class AdminService {
         return adminResource;
     }
 
+    @Path("serverinfo")
+    public ServerInfoAdminResource getServerInfo(@Context final HttpHeaders headers) {
+        RealmManager realmManager = new RealmManager(session);
+        RealmModel saasRealm = getAdminstrationRealm(realmManager);
+        if (saasRealm == null)
+            throw new NotFoundException();
+        UserModel admin = authManager.authenticateSaasIdentity(saasRealm, uriInfo, headers);
+        if (admin == null) {
+            throw new NotAuthorizedException("Bearer");
+        }
+        ApplicationModel adminConsole = saasRealm.getApplicationNameMap().get(Constants.ADMIN_CONSOLE_APPLICATION);
+        if (adminConsole == null) {
+            throw new NotFoundException();
+        }
+        RoleModel adminRole = adminConsole.getRole(Constants.ADMIN_CONSOLE_ADMIN_ROLE);
+        if (!adminConsole.hasRole(admin, adminRole)) {
+            logger.warn("not a Realm admin");
+            throw new NotAuthorizedException("Bearer");
+        }
+        ServerInfoAdminResource adminResource = new ServerInfoAdminResource();
+        resourceContext.initResource(adminResource);
+        return adminResource;
+    }
+
     @Path("login")
     @GET
     @NoCache
