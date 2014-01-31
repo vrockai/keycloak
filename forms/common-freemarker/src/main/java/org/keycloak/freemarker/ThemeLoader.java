@@ -1,5 +1,6 @@
 package org.keycloak.freemarker;
 
+import org.jboss.resteasy.logging.Logger;
 import org.keycloak.util.ProviderLoader;
 
 import java.io.IOException;
@@ -15,7 +16,14 @@ import java.util.ServiceLoader;
  */
 public class ThemeLoader {
 
+    private static final Logger logger = Logger.getLogger(ThemeLoader.class);
+    public static final String BASE = "base";
+
     public static Theme createTheme(String name, Theme.Type type) {
+        if (name == null) {
+            name = BASE;
+        }
+
         Iterable<ThemeProvider> providers = ProviderLoader.load(ThemeProvider.class);
 
         Theme theme = findTheme(providers, name, type);
@@ -37,11 +45,25 @@ public class ThemeLoader {
     private static Theme findTheme(Iterable<ThemeProvider> providers, String name, Theme.Type type) {
         for (ThemeProvider p : providers) {
             if (p.hasTheme(name, type)) {
-                return p.createTheme(name, type);
+                try {
+                    return p.createTheme(name, type);
+                } catch (IOException e) {
+                    if (name.equals(BASE)) {
+                        throw new RuntimeException("Failed to create " + type.toString().toLowerCase() + " theme", e);
+                    } else {
+                        logger.error("Failed to create " + type.toString().toLowerCase() + " theme", e);
+                        return findTheme(providers, BASE, type);
+                    }
+                }
             }
         }
 
-        throw new RuntimeException(type.toString().toLowerCase() + " theme '" + name + "' not found");
+        if (name.equals(BASE)) {
+            throw new RuntimeException(type.toString().toLowerCase() + " theme '" + name + "' not found");
+        } else {
+            logger.error(type.toString().toLowerCase() + " theme '" + name + "' not found");
+            return findTheme(providers, BASE, type);
+        }
     }
 
     public static class ExtendingTheme implements Theme {

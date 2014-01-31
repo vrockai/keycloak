@@ -21,6 +21,8 @@
  */
 package org.keycloak.login.freemarker.model;
 
+import org.keycloak.freemarker.Theme;
+import org.keycloak.models.RealmModel;
 import org.keycloak.services.resources.TokenService;
 import org.keycloak.services.resources.flows.Urls;
 
@@ -37,9 +39,9 @@ public class UrlBean {
 
     private String realm;
 
-    public UrlBean(String realm, String themeName, URI baseURI) {
-        this.realm = realm;
-        this.themeName = themeName;
+    public UrlBean(RealmModel realm, Theme theme, URI baseURI) {
+        this.realm = realm.getName();
+        this.themeName = theme.getName();
         this.baseURI = baseURI;
     }
 

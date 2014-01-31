@@ -5,6 +5,7 @@ import org.keycloak.freemarker.ThemeProvider;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +25,7 @@ public class FolderThemeProvider implements ThemeProvider {
     }
 
     @Override
-    public Theme createTheme(String name, Theme.Type type) {
+    public Theme createTheme(String name, Theme.Type type) throws IOException {
         if (hasTheme(name, type)) {
             return new FolderTheme(new File(getTypeDir(type), name), type);
         }

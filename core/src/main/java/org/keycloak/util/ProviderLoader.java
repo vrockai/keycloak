@@ -57,7 +57,7 @@ public class ProviderLoader<T> implements Iterable<T> {
             while (itr.hasNext()) {
                 if (itr.hasNext()) {
                     T n = itr.next();
-                    if (!System.getProperties().containsKey(n.getClass().toString() + ".disabled")) {
+                    if (!System.getProperties().containsKey(n.getClass().getName() + ".disabled")) {
                         next = n;
                         return;
                     }

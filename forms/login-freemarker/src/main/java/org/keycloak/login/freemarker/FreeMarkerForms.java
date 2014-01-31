@@ -139,14 +139,14 @@ public class FreeMarkerForms implements Forms {
             attributes.put("message", new MessageBean(rb.containsKey(message) ? rb.getString(message) : message, messageType));
         }
 
-        String themeName = realm.getTheme() != null ? realm.getTheme() : "keycloak";
+        Theme theme = ThemeLoader.createTheme(realm.getTheme(), Theme.Type.LOGIN);
 
         URI baseUri = uriBuilder.build();
 
         if (realm != null) {
             attributes.put("realm", new RealmBean(realm));
             attributes.put("social", new SocialBean(realm, baseUri));
-            attributes.put("url", new UrlBean(realm.getName(), themeName, baseUri));
+            attributes.put("url", new UrlBean(realm, theme, baseUri));
         }
 
         attributes.put("login", new LoginBean(formData));
@@ -166,7 +166,6 @@ public class FreeMarkerForms implements Forms {
                 break;
         }
 
-        Theme theme = ThemeLoader.createTheme(themeName, Theme.Type.LOGIN);
 
         String result = processTemplate(attributes, page, theme);
         return Response.status(status).type(MediaType.TEXT_HTML).entity(result).build();

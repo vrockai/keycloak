@@ -1,10 +1,13 @@
 package org.keycloak.login.theme;
 
 import org.keycloak.freemarker.Theme;
+import org.keycloak.freemarker.ThemeLoader;
 import org.keycloak.freemarker.ThemeProvider;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -12,18 +15,26 @@ import java.util.Set;
  */
 public class DefaultLoginThemeProvider implements ThemeProvider {
 
+    public static final String RCUE = "rcue";
+    public static final String KEYCLOAK = "keycloak";
+
     private static Set<String> defaultThemes = new HashSet<String>();
+    private static Map<String, String> parents = new HashMap<String, String>();
 
     static {
-        defaultThemes.add("rcue");
-        defaultThemes.add("keycloak");
+        defaultThemes.add(ThemeLoader.BASE);
+        defaultThemes.add(RCUE);
+        defaultThemes.add(KEYCLOAK);
+
+        parents.put(ThemeLoader.BASE, null);
+        parents.put(RCUE, ThemeLoader.BASE);
+        parents.put(KEYCLOAK, RCUE);
     }
 
     @Override
     public Theme createTheme(String name, Theme.Type type) {
         if (hasTheme(name, type)) {
-            String parentName = "keycloak".equals(name) ? "rcue" : null;
-            return new ClassLoaderTheme(name, parentName, type);
+            return new ClassLoaderTheme(name, parents.get(name), type);
         } else {
             return null;
         }

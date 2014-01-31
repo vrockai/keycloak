@@ -1,5 +1,6 @@
 package org.keycloak.freemarker;
 
+import java.io.IOException;
 import java.util.Set;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Set;
  */
 public interface ThemeProvider {
 
-    public Theme createTheme(String name, Theme.Type type);
+    public Theme createTheme(String name, Theme.Type type) throws IOException;
 
     public Set<String> nameSet(Theme.Type type);
 

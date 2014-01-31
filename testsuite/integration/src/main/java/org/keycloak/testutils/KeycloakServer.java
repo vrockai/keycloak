@@ -37,6 +37,8 @@ import io.undertow.servlet.api.ServletInfo;
 import org.jboss.resteasy.logging.Logger;
 import org.jboss.resteasy.plugins.server.undertow.UndertowJaxrsServer;
 import org.jboss.resteasy.spi.ResteasyDeployment;
+import org.keycloak.login.theme.ClassLoaderTheme;
+import org.keycloak.login.theme.DefaultLoginThemeProvider;
 import org.keycloak.services.tmp.TmpAdminRedirectServlet;
 import org.keycloak.util.JsonSerialization;
 import org.keycloak.models.Constants;
@@ -136,6 +138,9 @@ public class KeycloakServer {
                 throw new RuntimeException("Invalid resources directory");
             }
 
+            System.setProperty(DefaultLoginThemeProvider.class.getName() + ".disabled", "");
+            System.setProperty("keycloak.theme.dir", file(dir.getAbsolutePath(), "forms", "common-themes", "src", "main", "resources", "theme").getAbsolutePath());
+
             config.setResourcesHome(dir.getAbsolutePath());
         }
 
@@ -231,7 +236,6 @@ public class KeycloakServer {
 
             // No need to require admin to change password as this server is for dev/test
             manager.getRealm(Constants.ADMIN_REALM).getUser("admin").removeRequiredAction(UserModel.RequiredAction.UPDATE_PASSWORD);
-            manager.getRealm(Constants.ADMIN_REALM).setTheme("test");
 
             session.getTransaction().commit();
         } finally {
