@@ -6,6 +6,7 @@ import org.keycloak.social.SocialProvider;
 import org.keycloak.util.ProviderLoader;
 
 import javax.ws.rs.GET;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,6 +33,7 @@ public class ServerInfoAdminResource {
             for (ThemeProvider p : providers) {
                 themes.addAll(p.nameSet(type));
             }
+            Collections.sort(themes);
             info.themes.put(type.toString().toLowerCase(), themes);
         }
     }
@@ -41,6 +43,7 @@ public class ServerInfoAdminResource {
         for (SocialProvider p : ProviderLoader.load(SocialProvider.class)) {
             info.socialProviders.add(p.getId());
         }
+        Collections.sort(info.socialProviders);
     }
 
     public static class ServerInfoRepresentation {

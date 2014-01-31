@@ -18,6 +18,10 @@ public class DefaultLoginThemeProvider implements ThemeProvider {
     public static final String RCUE = "rcue";
     public static final String KEYCLOAK = "keycloak";
 
+    static {
+        ThemeLoader.DEFAULT = KEYCLOAK;
+    }
+
     private static Set<String> defaultThemes = new HashSet<String>();
     private static Map<String, String> parents = new HashMap<String, String>();
 

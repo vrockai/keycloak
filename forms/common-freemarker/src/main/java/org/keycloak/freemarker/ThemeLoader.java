@@ -18,10 +18,11 @@ public class ThemeLoader {
 
     private static final Logger logger = Logger.getLogger(ThemeLoader.class);
     public static final String BASE = "base";
+    public static String DEFAULT = BASE;
 
     public static Theme createTheme(String name, Theme.Type type) {
         if (name == null) {
-            name = BASE;
+            name = DEFAULT;
         }
 
         Iterable<ThemeProvider> providers = ProviderLoader.load(ThemeProvider.class);
