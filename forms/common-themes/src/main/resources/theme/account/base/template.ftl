@@ -4,26 +4,9 @@
 <head>
     <meta charset="utf-8">
     <title>Account Management</title>
-    <link rel="icon" href="${resourcePath}/img/favicon.ico">
+    <link rel="icon" href="${url.resourcesPath}/img/favicon.ico">
 
-    <!-- Frameworks -->
-    <link rel="stylesheet" href="${resourcePath}/css/reset.css">
-    <link href="${resourcePath}/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
-    <link href="${resourcePath}/css/zocial/zocial.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="${resourcePath}/css/sprites.css">
-    <!-- TODO remove external links -->
-    <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic'>
-
-    <!-- RCUE styles -->
-    <link rel="stylesheet" href="${resourcePath}/css/base.css">
-    <link rel="stylesheet" href="${resourcePath}/css/forms.css">
-    <link rel="stylesheet" href="${resourcePath}/css/header.css">
-    <link rel="stylesheet" href="${resourcePath}/css/icons.css">
-    <link rel="stylesheet" href="${resourcePath}/css/tables.css">
-
-    <!-- Page styles -->
-    <link rel="stylesheet" href="${resourcePath}/css/admin-console.css">
+    <link rel="stylesheet" href="${url.resourcesPath}/css/styles.css">
 </head>
 <body class="admin-console user ${bodyClass}">
 

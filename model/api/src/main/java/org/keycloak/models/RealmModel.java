@@ -158,8 +158,12 @@ public interface RealmModel extends RoleContainerModel, RoleMapperModel, ScopeMa
 
     void setSocialConfig(Map<String, String> socialConfig);
 
-    String getTheme();
+    String getLoginTheme();
 
-    void setTheme(String name);
+    void setLoginTheme(String name);
+
+    String getAccountTheme();
+
+    void setAccountTheme(String name);
 
 }

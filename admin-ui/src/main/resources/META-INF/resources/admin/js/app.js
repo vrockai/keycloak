@@ -47,6 +47,9 @@ module.config([ '$routeProvider', function($routeProvider) {
             resolve : {
                 realm : function(RealmLoader) {
                     return RealmLoader();
+                },
+                serverInfo : function(ServerInfoLoader) {
+                    return ServerInfoLoader();
                 }
             },
             controller : 'RealmDetailCtrl'
@@ -78,6 +81,9 @@ module.config([ '$routeProvider', function($routeProvider) {
             resolve : {
                 realm : function(RealmLoader) {
                     return RealmLoader();
+                },
+                serverInfo : function(ServerInfoLoader) {
+                    return ServerInfoLoader();
                 }
             },
             controller : 'RealmSocialCtrl'

@@ -141,8 +141,9 @@ module.controller('RealmCreateCtrl', function($scope, Current, Realm, $upload, $
 });
 
 
-module.controller('RealmDetailCtrl', function($scope, Current, Realm, realm, $http, $location, Dialog, Notifications) {
+module.controller('RealmDetailCtrl', function($scope, Current, Realm, realm, serverInfo, $http, $location, Dialog, Notifications) {
     $scope.createRealm = !realm.realm;
+    $scope.serverInfo = serverInfo;
 
     console.log('RealmDetailCtrl');
 
@@ -473,11 +474,12 @@ module.controller('RealmDefaultRolesCtrl', function ($scope, Realm, realm, appli
 
 });
 
-module.controller('RealmSocialCtrl', function($scope, realm, Realm, $location, Notifications) {
+module.controller('RealmSocialCtrl', function($scope, realm, Realm, serverInfo, $location, Notifications) {
     console.log('RealmSocialCtrl');
 
     $scope.realm = { id : realm.id, realm : realm.realm, social : realm.social, registrationAllowed : realm.registrationAllowed,
         tokenLifespan : realm.tokenLifespan,  accessCodeLifespan : realm.accessCodeLifespan };
+    $scope.serverInfo = serverInfo;
 
     if (!realm["socialProviders"]){
         $scope.realm["socialProviders"] = {};
@@ -486,7 +488,7 @@ module.controller('RealmSocialCtrl', function($scope, realm, Realm, $location, N
     }
 
     // Hardcoded provider list in form of map providerId:providerName
-    $scope.allProviders = { google:"Google", facebook:"Facebook", twitter:"Twitter" };
+    $scope.allProviders = serverInfo.socialProviders;
     $scope.availableProviders = [];
 
     for (var provider in $scope.allProviders){

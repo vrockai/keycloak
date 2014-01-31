@@ -1,5 +1,7 @@
 package org.keycloak.account.freemarker.model;
 
+import org.keycloak.freemarker.Theme;
+import org.keycloak.models.RealmModel;
 import org.keycloak.services.resources.flows.Urls;
 
 import java.net.URI;
@@ -10,11 +12,13 @@ import java.net.URI;
 public class UrlBean {
 
     private String realm;
+    private Theme theme;
     private URI baseURI;
     private String referrerURI;
 
-    public UrlBean(String realm, URI baseURI, String referrerURI) {
-        this.realm = realm;
+    public UrlBean(RealmModel realm, Theme theme, URI baseURI, String referrerURI) {
+        this.realm = realm.getName();
+        this.theme = theme;
         this.baseURI = baseURI;
         this.referrerURI = referrerURI;
     }
@@ -49,6 +53,11 @@ public class UrlBean {
 
     public String getReferrerURI() {
         return referrerURI;
+    }
+
+    public String getResourcesPath() {
+        URI uri = Urls.themeRoot(baseURI);
+        return uri.getPath() + "/" + theme.getType().toString().toLowerCase() +"/" + theme.getName();
     }
 
 }

@@ -1,10 +1,7 @@
 package org.keycloak.login.freemarker;
 
-import freemarker.cache.URLTemplateLoader;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import org.jboss.resteasy.spi.HttpRequest;
+import org.keycloak.freemarker.FreeMarkerUtil;
 import org.keycloak.freemarker.Theme;
 import org.keycloak.freemarker.ThemeLoader;
 import org.keycloak.login.Forms;
@@ -30,11 +27,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.net.URI;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +38,7 @@ import java.util.ResourceBundle;
  */
 public class FreeMarkerForms implements Forms {
 
-    private static final String BUNDLE = "theme.login.default.messages.messages";
+    private static final String BUNDLE = "theme.login.base.messages.messages";
 
     private String message;
     private String accessCodeId;
@@ -139,7 +132,7 @@ public class FreeMarkerForms implements Forms {
             attributes.put("message", new MessageBean(rb.containsKey(message) ? rb.getString(message) : message, messageType));
         }
 
-        Theme theme = ThemeLoader.createTheme(realm.getTheme(), Theme.Type.LOGIN);
+        Theme theme = ThemeLoader.createTheme(realm.getLoginTheme(), Theme.Type.LOGIN);
 
         URI baseUri = uriBuilder.build();
 
@@ -167,27 +160,8 @@ public class FreeMarkerForms implements Forms {
         }
 
 
-        String result = processTemplate(attributes, page, theme);
+        String result = FreeMarkerUtil.processTemplate(attributes, Templates.getTemplate(page), theme);
         return Response.status(status).type(MediaType.TEXT_HTML).entity(result).build();
-    }
-
-    private String processTemplate(Object data, FormsPages page, Theme theme) {
-        Writer out = new StringWriter();
-        Configuration cfg = new Configuration();
-
-        try {
-
-            cfg.setTemplateLoader(new ThemeTemplateLoader(theme));
-            Template template = cfg.getTemplate(Templates.getTemplate(page));
-
-            template.process(data, out);
-        } catch (IOException e) {
-            throw new RuntimeException(e); // TODO Error handling
-        } catch (TemplateException e) {
-            throw new RuntimeException(e); // TODO Error handling
-        }
-
-        return out.toString();
     }
 
     public Response createLogin() {
@@ -270,25 +244,6 @@ public class FreeMarkerForms implements Forms {
     public Forms setStatus(Response.Status status) {
         this.status = status;
         return this;
-    }
-
-    public static class ThemeTemplateLoader extends URLTemplateLoader {
-
-        private Theme theme;
-
-        public ThemeTemplateLoader(Theme theme) {
-            this.theme = theme;
-        }
-
-        @Override
-        protected URL getURL(String name) {
-            try {
-                return theme.getTemplate(name);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
     }
 
 }

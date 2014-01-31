@@ -27,7 +27,8 @@ public class RealmData extends AbstractPartition {
     private Map<String, String> smtpConfig;
     private Map<String, String> socialConfig;
     private String passwordPolicy;
-    private String theme;
+    private String loginTheme;
+    private String accountTheme;
 
     public RealmData() {
         super(null);
@@ -188,11 +189,20 @@ public class RealmData extends AbstractPartition {
     }
 
     @AttributeProperty
-    public String getTheme() {
-        return theme;
+    public String getLoginTheme() {
+        return loginTheme;
     }
 
-    public void setTheme(String theme) {
-        this.theme = theme;
+    public void setLoginTheme(String theme) {
+        this.loginTheme = theme;
+    }
+
+    @AttributeProperty
+    public String getAccountTheme() {
+        return accountTheme;
+    }
+
+    public void setAccountTheme(String theme) {
+        this.accountTheme = theme;
     }
 }

@@ -1,25 +1,21 @@
 package org.keycloak.account.freemarker;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import org.keycloak.account.Account;
 import org.keycloak.account.AccountPages;
 import org.keycloak.account.freemarker.model.AccountBean;
 import org.keycloak.account.freemarker.model.MessageBean;
 import org.keycloak.account.freemarker.model.TotpBean;
 import org.keycloak.account.freemarker.model.UrlBean;
+import org.keycloak.freemarker.FreeMarkerUtil;
+import org.keycloak.freemarker.Theme;
+import org.keycloak.freemarker.ThemeLoader;
 import org.keycloak.models.ApplicationModel;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +26,7 @@ import java.util.ResourceBundle;
  */
 public class FreeMarkerAccount implements Account {
 
-    private static final String BUNDLE = "account.theme.default.messages.messages";
+    private static final String BUNDLE = "theme.account.base.messages.messages";
 
     private UserModel user;
     private Response.Status status = Response.Status.OK;
@@ -56,19 +52,15 @@ public class FreeMarkerAccount implements Account {
         ResourceBundle rb = ResourceBundle.getBundle(BUNDLE);
         URI baseUri = uriInfo.getBaseUri();
 
-        String resourcePath = baseUri.getPath();
-        resourcePath = resourcePath.substring(0, resourcePath.length() - 6);
-        resourcePath += "/account/theme/default";
-
         attributes.put("rb", rb);
 
         if (message != null) {
             attributes.put("message", new MessageBean(rb.containsKey(message) ? rb.getString(message) : message, messageType));
         }
 
-        attributes.put("resourcePath", resourcePath);
+        Theme theme = ThemeLoader.createTheme(realm.getAccountTheme(), Theme.Type.ACCOUNT);
 
-        attributes.put("url", new UrlBean(realmName, baseUri, getReferrerUri()));
+        attributes.put("url", new UrlBean(realm, theme, baseUri, getReferrerUri()));
 
         switch (page) {
             case ACCOUNT:
@@ -79,7 +71,7 @@ public class FreeMarkerAccount implements Account {
                 break;
         }
 
-        String result = processTemplate(attributes, page);
+        String result = FreeMarkerUtil.processTemplate(attributes, Templates.getTemplate(page), theme);
         return Response.status(status).type(MediaType.TEXT_HTML).entity(result).build();
     }
 
@@ -92,24 +84,6 @@ public class FreeMarkerAccount implements Account {
             }
         }
         return null;
-    }
-
-    private String processTemplate(Object data, AccountPages page) {
-        Writer out = new StringWriter();
-        Configuration cfg = new Configuration();
-
-        try {
-            cfg.setClassForTemplateLoading(FreeMarkerAccount.class, "/account/theme/default");
-            Template template = cfg.getTemplate(Templates.getTemplate(page));
-
-            template.process(data, out);
-        } catch (IOException e) {
-            throw new RuntimeException(e); // TODO Error handling
-        } catch (TemplateException e) {
-            throw new RuntimeException(e); // TODO Error handling
-        }
-
-        return out.toString();
     }
 
     @Override

@@ -35,13 +35,13 @@ public class UrlBean {
 
     private URI baseURI;
 
-    private String themeName;
+    private Theme theme;
 
     private String realm;
 
     public UrlBean(RealmModel realm, Theme theme, URI baseURI) {
         this.realm = realm.getName();
-        this.themeName = theme.getName();
+        this.theme = theme;
         this.baseURI = baseURI;
     }
 
@@ -91,7 +91,7 @@ public class UrlBean {
 
     public String getResourcesPath() {
         URI uri = Urls.themeRoot(baseURI);
-        return uri.getPath() + "/login/" + themeName;
+        return uri.getPath() + "/" + theme.getType().toString().toLowerCase() +"/" + theme.getName();
     }
 
 }

@@ -36,7 +36,7 @@ public class FolderThemeProvider implements ThemeProvider {
     public Set<String> nameSet(Theme.Type type) {
         File typeDir = getTypeDir(type);
         if (typeDir != null) {
-            File[] themes = rootDir.listFiles(new FileFilter() {
+            File[] themes = typeDir.listFiles(new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {
                     return pathname.isDirectory();

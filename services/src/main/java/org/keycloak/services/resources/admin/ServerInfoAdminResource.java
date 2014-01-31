@@ -49,6 +49,17 @@ public class ServerInfoAdminResource {
 
         private List<String> socialProviders;
 
+        public ServerInfoRepresentation() {
+        }
+
+        public Map<String, List<String>> getThemes() {
+            return themes;
+        }
+
+        public List<String> getSocialProviders() {
+            return socialProviders;
+        }
+
     }
 
 }
