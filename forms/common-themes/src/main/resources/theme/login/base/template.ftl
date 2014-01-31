@@ -37,7 +37,7 @@
 
                 <#if social.displaySocialProviders>
                     <div class="section social-login"> <span>or</span>
-                        <p>${rb.getString('logInWith')}</p>
+                        <p>${rb.logInWith}</p>
                         <ul>
                             <#list social.providers as p>
                                 <li><a href="${p.loginUrl}" class="zocial ${p.id}"> <span class="text">${p.name}</span></a></li>
@@ -53,7 +53,7 @@
         </div>
 
         <p class="powered">
-            <a href="http://www.keycloak.org">${rb.getString('poweredByKeycloak')}</a>
+            <a href="http://www.keycloak.org">${rb.poweredByKeycloak}</a>
         </p>
     </div>
 

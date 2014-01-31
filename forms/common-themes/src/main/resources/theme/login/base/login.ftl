@@ -13,11 +13,11 @@
     <div id="form">
         <form action="${url.loginAction}" method="post">
             <div>
-                <label for="username">${rb.getString('username')}</label><input id="username" name="username" value="${login.username!''}" type="text" autofocus />
+                <label for="username">${rb.username}</label><input id="username" name="username" value="${login.username!''}" type="text" autofocus />
             </div>
 
             <div>
-                <label for="password">${rb.getString('password')}</label><input id="password" name="password" type="password" />
+                <label for="password">${rb.password}</label><input id="password" name="password" type="password" />
             </div>
 
                 <input class="btn-primary" name="login" type="submit" value="Log In"/>
@@ -29,7 +29,7 @@
 
     <div id="info">
         <#if realm.registrationAllowed>
-            <p>${rb.getString('noAccount')} <a href="${url.registrationUrl}">${rb.getString('register')}</a>.</p>
+            <p>${rb.noAccount} <a href="${url.registrationUrl}">${rb.register}</a>.</p>
         </#if>
         <#if realm.resetPasswordAllowed>
             <p>Forgot <a href="${url.loginUsernameReminderUrl}">Username</a> / <a href="${url.loginPasswordResetUrl}">Password</a>?</p>

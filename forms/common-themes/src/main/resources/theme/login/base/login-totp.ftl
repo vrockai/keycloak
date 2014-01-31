@@ -16,7 +16,7 @@
         <input id="password" name="password" value="${login.password!''}" type="hidden" />
 
         <div>
-            <label for="totp">${rb.getString('authenticatorCode')}</label><input id="totp" name="totp" type="text" />
+            <label for="totp">${rb.authenticatorCode}</label><input id="totp" name="totp" type="text" />
         </div>
 
         <div class="aside-btn">
@@ -30,7 +30,7 @@
     <#elseif section = "info">
 
         <#if realm.registrationAllowed>
-        <p>${rb.getString('noAccount')} <a href="${url.registrationUrl}">${rb.getString('register')}</a>.</p>
+        <p>${rb.noAccount} <a href="${url.registrationUrl}">${rb.register}</a>.</p>
         </#if>
 
     </#if>

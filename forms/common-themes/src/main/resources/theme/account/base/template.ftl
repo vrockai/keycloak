@@ -13,10 +13,10 @@
     <#if message?has_content>
     <div class="feedback-aligner">
         <#if message.success>
-        <div class="feedback success show"><p><strong>${rb.getString('successHeader')}</strong> ${message.summary}</p></div>
+        <div class="feedback success show"><p><strong>${rb.successHeader}</strong> ${message.summary}</p></div>
         </#if>
         <#if message.error>
-        <div class="feedback error show"><p><strong>${rb.getString('errorHeader')}</strong> ${message.summary}</p></div>
+        <div class="feedback error show"><p><strong>${rb.errorHeader}</strong> ${message.summary}</p></div>
         </#if>
     </div>
     </#if>

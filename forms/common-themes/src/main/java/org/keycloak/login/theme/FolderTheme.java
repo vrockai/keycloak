@@ -47,6 +47,18 @@ public class FolderTheme implements Theme {
     }
 
     @Override
+    public URL getMessages() throws IOException {
+        File file = new File(themeDir, "messages" + File.separator + "messages.properties");
+        return file.isFile() ? file.toURI().toURL() : null;
+    }
+
+    @Override
+    public InputStream getMessagesAsStream() throws IOException {
+        URL url = getMessages();
+        return url != null ? url.openStream() : null;
+    }
+
+    @Override
     public URL getTemplate(String name) throws IOException {
         File file = new File(themeDir, name);
         return file.isFile() ? file.toURI().toURL() : null;

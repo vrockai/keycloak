@@ -17,6 +17,10 @@ public interface Theme {
 
     public Type getType();
 
+    public URL getMessages() throws IOException;
+
+    public InputStream getMessagesAsStream() throws IOException;
+
     public URL getTemplate(String name) throws IOException;
 
     public InputStream getTemplateAsStream(String name) throws IOException;

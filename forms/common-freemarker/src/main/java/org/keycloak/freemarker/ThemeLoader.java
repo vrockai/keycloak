@@ -90,6 +90,28 @@ public class ThemeLoader {
         }
 
         @Override
+        public URL getMessages() throws IOException {
+            for (Theme t : themes) {
+                URL messages = t.getMessages();
+                if (messages != null) {
+                    return messages;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public InputStream getMessagesAsStream() throws IOException {
+            for (Theme t : themes) {
+                InputStream messages = t.getMessagesAsStream();
+                if (messages != null) {
+                    return messages;
+                }
+            }
+            return null;
+        }
+
+        @Override
         public URL getTemplate(String name) throws IOException {
             for (Theme t : themes) {
                 URL template = t.getTemplate(name);

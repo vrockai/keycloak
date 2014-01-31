@@ -2,19 +2,19 @@
 <@layout.registrationLayout bodyClass=""; section>
     <#if section = "title">
 
-    ${rb.getString('emailUsernameForgotHeader')}
+    ${rb.emailUsernameForgotHeader}
 
     <#elseif section = "header">
 
-    ${rb.getString('emailUsernameForgotHeader')}
+    ${rb.emailUsernameForgotHeader}
 
     <#elseif section = "form">
 
     <div id="form">
-        <p class="instruction">${rb.getString('emailUsernameInstruction')}</p>
+        <p class="instruction">${rb.emailUsernameInstruction}</p>
         <form action="${url.loginUsernameReminderUrl}" method="post">
         	<div>
-      	    	<label for="email">${rb.getString('email')}</label><input type="text" id="email" name="email" />
+      	    	<label for="email">${rb.email}</label><input type="text" id="email" name="email" />
 			</div>
             <input class="btn-primary" type="submit" value="Submit" />
         </form>

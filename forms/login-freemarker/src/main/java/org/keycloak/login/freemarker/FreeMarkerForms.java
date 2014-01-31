@@ -1,5 +1,6 @@
 package org.keycloak.login.freemarker;
 
+import org.jboss.logging.Logger;
 import org.jboss.resteasy.spi.HttpRequest;
 import org.keycloak.freemarker.FreeMarkerUtil;
 import org.keycloak.freemarker.Theme;
@@ -27,10 +28,12 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 /**
@@ -38,7 +41,7 @@ import java.util.ResourceBundle;
  */
 public class FreeMarkerForms implements Forms {
 
-    private static final String BUNDLE = "theme.login.base.messages.messages";
+    private static final Logger logger = Logger.getLogger(FreeMarkerForms.class);
 
     private String message;
     private String accessCodeId;
@@ -124,15 +127,21 @@ public class FreeMarkerForms implements Forms {
 
         Map<String, Object> attributes = new HashMap<String, Object>();
 
-        ResourceBundle rb = ResourceBundle.getBundle(BUNDLE);
+        Theme theme = ThemeLoader.createTheme(realm.getLoginTheme(), Theme.Type.LOGIN);
+
+        Properties rb = new Properties();
+        try {
+            rb.load(theme.getMessagesAsStream());
+        } catch (IOException e) {
+            logger.warn("Failed to load messages");
+        }
 
         attributes.put("rb", rb);
 
         if (message != null) {
-            attributes.put("message", new MessageBean(rb.containsKey(message) ? rb.getString(message) : message, messageType));
+            attributes.put("message", new MessageBean(rb.containsKey(message) ? rb.getProperty(message) : message, messageType));
         }
 
-        Theme theme = ThemeLoader.createTheme(realm.getLoginTheme(), Theme.Type.LOGIN);
 
         URI baseUri = uriBuilder.build();
 
@@ -158,7 +167,6 @@ public class FreeMarkerForms implements Forms {
                 attributes.put("oauth", new OAuthGrantBean(accessCode, client, realmRolesRequested, resourceRolesRequested));
                 break;
         }
-
 
         String result = FreeMarkerUtil.processTemplate(attributes, Templates.getTemplate(page), theme);
         return Response.status(status).type(MediaType.TEXT_HTML).entity(result).build();

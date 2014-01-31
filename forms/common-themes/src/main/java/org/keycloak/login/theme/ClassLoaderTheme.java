@@ -2,6 +2,7 @@ package org.keycloak.login.theme;
 
 import org.keycloak.freemarker.Theme;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -20,12 +21,15 @@ public class ClassLoaderTheme implements Theme {
 
     private final String resourceRoot;
 
+    private final String messages;
+
     public ClassLoaderTheme(String name, String parentName, Type type) {
         this.name = name;
         this.parentName = parentName;
         this.type = type;
         this.templateRoot = "theme/" + type.toString().toLowerCase() + "/" + name + "/";
         this.resourceRoot = "theme/" + type.toString().toLowerCase() + "/" + name + "/resources/";
+        this.messages = "theme/" + type.toString().toLowerCase() + "/" + name + "/messages/messages.properties";
     }
 
     @Override
@@ -41,6 +45,16 @@ public class ClassLoaderTheme implements Theme {
     @Override
     public Type getType() {
         return type;
+    }
+
+    @Override
+    public URL getMessages() throws IOException {
+        return getClass().getClassLoader().getResource(messages);
+    }
+
+    @Override
+    public InputStream getMessagesAsStream() throws IOException {
+        return getClass().getClassLoader().getResourceAsStream(messages);
     }
 
     @Override

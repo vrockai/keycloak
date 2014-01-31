@@ -8,19 +8,19 @@
     <form action="${url.accountUrl}" method="post">
         <fieldset class="border-top">
             <div class="form-group">
-                <label for="username">${rb.getString('username')}</label>
+                <label for="username">${rb.username}</label>
                 <input type="text" id="username" name="username" disabled="disabled" value="${account.username!''}"/>
             </div>
             <div class="form-group">
-                <label for="email">${rb.getString('email')}</label><span class="required">*</span>
+                <label for="email">${rb.email}</label><span class="required">*</span>
                 <input type="text" id="email" name="email" autofocus value="${account.email!''}"/>
             </div>
             <div class="form-group">
-                <label for="lastName">${rb.getString('lastName')}</label><span class="required">*</span>
+                <label for="lastName">${rb.lastName}</label><span class="required">*</span>
                 <input type="text" id="lastName" name="lastName" value="${account.lastName!''}"/>
             </div>
             <div class="form-group">
-                <label for="firstName">${rb.getString('firstName')}</label><span class="required">*</span>
+                <label for="firstName">${rb.firstName}</label><span class="required">*</span>
                 <input type="text" id="firstName" name="firstName" value="${account.firstName!''}"/>
             </div>
         </fieldset>

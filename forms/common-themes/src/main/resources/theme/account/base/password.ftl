@@ -8,15 +8,15 @@
     <form action="${url.passwordUrl}" method="post">
         <fieldset class="border-top">
             <div class="form-group">
-                <label for="password">${rb.getString('password')}</label>
+                <label for="password">${rb.password}</label>
                 <input type="password" id="password" name="password" autofocus>
             </div>
             <div class="form-group">
-                <label for="password-new">${rb.getString('passwordNew')}</label>
+                <label for="password-new">${rb.passwordNew}</label>
                 <input type="password" id="password-new" name="password-new">
             </div>
             <div class="form-group">
-                <label for="password-confirm" class="two-lines">${rb.getString('passwordConfirm')}</label>
+                <label for="password-confirm" class="two-lines">${rb.passwordConfirm}</label>
                 <input type="password" id="password-confirm" name="password-confirm">
             </div>
         </fieldset>

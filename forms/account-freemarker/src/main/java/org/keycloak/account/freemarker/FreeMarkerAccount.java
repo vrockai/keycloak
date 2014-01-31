@@ -1,5 +1,6 @@
 package org.keycloak.account.freemarker;
 
+import org.jboss.resteasy.logging.Logger;
 import org.keycloak.account.Account;
 import org.keycloak.account.AccountPages;
 import org.keycloak.account.freemarker.model.AccountBean;
@@ -16,9 +17,11 @@ import org.keycloak.models.UserModel;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 /**
@@ -26,7 +29,7 @@ import java.util.ResourceBundle;
  */
 public class FreeMarkerAccount implements Account {
 
-    private static final String BUNDLE = "theme.account.base.messages.messages";
+    private static final Logger logger = Logger.getLogger(FreeMarkerAccount.class);
 
     private UserModel user;
     private Response.Status status = Response.Status.OK;
@@ -48,17 +51,22 @@ public class FreeMarkerAccount implements Account {
     public Response createResponse(AccountPages page) {
         Map<String, Object> attributes = new HashMap<String, Object>();
 
-        String realmName = realm != null ? realm.getName() : null;
-        ResourceBundle rb = ResourceBundle.getBundle(BUNDLE);
-        URI baseUri = uriInfo.getBaseUri();
+        Theme theme = ThemeLoader.createTheme(realm.getAccountTheme(), Theme.Type.ACCOUNT);
+
+        Properties rb = new Properties();
+        try {
+            rb.load(theme.getMessagesAsStream());
+        } catch (IOException e) {
+            logger.warn("Failed to load messages");
+        }
 
         attributes.put("rb", rb);
 
-        if (message != null) {
-            attributes.put("message", new MessageBean(rb.containsKey(message) ? rb.getString(message) : message, messageType));
-        }
+        URI baseUri = uriInfo.getBaseUri();
 
-        Theme theme = ThemeLoader.createTheme(realm.getAccountTheme(), Theme.Type.ACCOUNT);
+        if (message != null) {
+            attributes.put("message", new MessageBean(rb.containsKey(message) ? rb.getProperty(message) : message, messageType));
+        }
 
         attributes.put("url", new UrlBean(realm, theme, baseUri, getReferrerUri()));
 
